@@ -67,17 +67,17 @@ form_weather_json(
 )
 
 
-def opt_in_to_gora(client, token_id, account: dict) -> None:
-    unsigned_txn = AssetTransferTxn(
-        sender=account["address"],
-        sp=client.suggested_params(),
-        receiver=account["address"],
-        amt=0,
-        index=token_id,
-    )
-    signed_txn = unsigned_txn.sign(account["private_key"])
-    txid = client.send_transacation(signed_txn)
-    txn_result = wait_for_confirmation(client, txid, 4)
+# def opt_in_to_gora(client, token_id, account: dict) -> None:
+#     unsigned_txn = AssetTransferTxn(
+#         sender=account["address"],
+#         sp=client.suggested_params(),
+#         receiver=account["address"],
+#         amt=0,
+#         index=token_id,
+#     )
+#     signed_txn = unsigned_txn.sign(account["private_key"])
+#     txid = client.send_transacation(signed_txn)
+#     txn_result = wait_for_confirmation(client, txid, 4)
 
 
 def demo() -> None:
@@ -90,22 +90,22 @@ def demo() -> None:
 
     suggested_params = client.suggested_params()
 
-    try:
-        asset_info = client.account_asset_info(
-            CREATOR["address"], GORA_TESTNET_ASSET_ID
-        )
-        print(asset_info)
-        if asset_info["asset-holding"]["amount"] == 0:
-            print("Need sufficient $GORA")
-    finally:
-        opt_in_to_gora(
-            client=client,
-            token_id=GORA_TESTNET_ASSET_ID,
-            account={
-                "address": CREATOR["address"],
-                "private_key": CREATOR["private_key"],
-            },
-        )
+    # try:
+    #     asset_info = client.account_asset_info(
+    #         CREATOR["address"], GORA_TESTNET_ASSET_ID
+    #     )
+    #     print(asset_info)
+    #     if asset_info["asset-holding"]["amount"] == 0:
+    #         print("Need sufficient $GORA")
+    # finally:
+    #     opt_in_to_gora(
+    #         client=client,
+    #         token_id=GORA_TESTNET_ASSET_ID,
+    #         account={
+    #             "address": CREATOR["address"],
+    #             "private_key": CREATOR["private_key"],
+    #         },
+    #     )
     
     
 
