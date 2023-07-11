@@ -1,0 +1,13 @@
+# AlgoKit template generation answers
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 38a15bd
+_src_path: https://github.com/GoracleNetwork/algokit_default_template
+algod_port: 4001
+algod_server: http://localhost
+algod_token: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+goracle_abi_path: ${PWD}/protocol/assets/abi
+indexer_port: 8980
+indexer_server: http://localhost
+indexer_token: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+kmd_port: 4002
+
