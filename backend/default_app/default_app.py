@@ -89,7 +89,7 @@ class PolicyState:
 
 
 go_insure_app = Application(
-    "Insurance dApp",
+    name="InsurancedApp",
     descr="Insurance dApp",
     state=PolicyState(),
     build_options=BuildOptions(avm_version=8),
