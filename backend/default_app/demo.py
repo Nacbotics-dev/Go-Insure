@@ -31,8 +31,6 @@ from build import build
 
 app = default_app.go_insure_app
 
-policy_codec = ABIType.from_string(str(default_app.Policy().type_spec()))
-
 
 def demo() -> None:
     with open(default_app_path + "/feed_examples.json") as f:
@@ -54,6 +52,7 @@ def demo() -> None:
 
     # fund owner account
     owner = generate_account()
+    print(owner.private_key)
     fund_account(owner.address, 1_000_000_000_000)
 
     # deploy test Gora token

@@ -1,5 +1,5 @@
 {
-    "name": "Insurance dApp",
+    "name": "InsurancedApp",
     "methods": [
         {
             "name": "opt_in",
