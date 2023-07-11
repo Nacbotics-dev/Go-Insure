@@ -1,5 +1,5 @@
 #pragma version 8
-intcblock 0 1 1000000 32 320 1258
+intcblock 0 1 1000000 32 320 1528
 bytecblock 0x 0x626f785f6e616d65 0x696e7375726572 0x706f6c6963795f65787069726174696f6e5f64617465 0x00 0x636f7665726167655f616d6f756e74 0x50656e64696e67
 txn NumAppArgs
 intc_0 // 0
@@ -746,7 +746,7 @@ bytec_1 // "box_name"
 frame_dig -7
 extract 2 0
 app_global_put
-intc 5 // 1258
+intc 5 // 1528
 txna Applications 1
 ==
 assert
@@ -868,7 +868,7 @@ frame_bury 44
 itxn_begin
 pushint 6 // appl
 itxn_field TypeEnum
-intc 5 // 1258
+intc 5 // 1528
 itxn_field ApplicationID
 pushbytes 0x6f6ae98b // "request(byte[],byte[],uint64,byte[],uint64[],uint64[],address[],(byte[],uint64)[])void"
 itxn_field ApplicationArgs

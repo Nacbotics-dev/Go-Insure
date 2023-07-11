@@ -33,7 +33,8 @@ from algokit_utils import ApplicationClient,Account
 from algosdk.v2client.algod import AlgodClient
 import algosdk.abi as abi
 
-ALGOD_CLIENT = algokit_utils.get_algod_client()
+# ALGOD_CLIENT = algokit_utils.get_algod_client()
+ALGOD_CLIENT = algokit_utils.get_algonode_config('testnet', 'algod', token="https://testnet-api.algonode.cloud")
 
 class Main_Contract():
     def __init__(
