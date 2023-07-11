@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useWallet } from "@txnlab/use-wallet";
 import { shortenAddress } from "../helpers/shortenAddress";
 
-import { KrowdFund } from "../app_client/krowdfund_client";
+import { Insurance } from "../app_client/insurance dapp_client";
 
 // If you just need a placeholder signer
 const PlaceHolderSigner: algosdk.TransactionSigner = (
@@ -20,8 +20,8 @@ const PlaceHolderSigner: algosdk.TransactionSigner = (
 
 // AnonClient can still allow reads for an app but no transactions
 // can be signed
-const AnonClient = (client: algosdk.Algodv2, appId: number): KrowdFund => {
-  return new KrowdFund({
+const AnonClient = (client: algosdk.Algodv2, appId: number): Insurance => {
+  return new Insurance({
     // @ts-ignore
     client: client,
     signer: PlaceHolderSigner,
@@ -40,7 +40,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   // Init our app client
-  const [appClient, setAppClient] = useState<KrowdFund>(
+  const [appClient, setAppClient] = useState<Insurance>(
     AnonClient(algodClient, appId)
   );
 
@@ -54,7 +54,7 @@ export default function Home() {
       setAppClient(AnonClient(algodClient, appId));
     } else if (activeAccount && activeAccount.address != appClient.sender) {
       setAppClient(
-        new KrowdFund({
+        new Insurance({
           client: algodClient,
           signer: signer,
           sender: activeAccount.address,
