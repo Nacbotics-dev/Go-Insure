@@ -53,10 +53,10 @@ A decentralized insurance solution offers several benefits:
 
 ## Dependencies
 
-- python version 3.11.3
-- beaker-pyteal version 1.0.1
-- py-algorand-sdk version >=2.2.0, <3.0.0
-- beaker-ts version ^0.0.95
-- algosdk version 2.1.0
-- next-js version 13.4.9
-- txnlab/use-wallet version 2.0.0-alpha.5
+- python: version 3.11.3
+- beaker-pyteal: version 1.0.1
+- py-algorand-sdk: version >=2.2.0, <3.0.0
+- beaker-ts: version ^0.0.95
+- algosdk: version 2.1.0
+- next-js: version 13.4.9
+- txnlab/use-wallet: version 2.0.0-alpha.5
