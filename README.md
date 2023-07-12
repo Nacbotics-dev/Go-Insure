@@ -1,24 +1,16 @@
-# Decentralized Insurance
+# Go-Insure
 
-This is a decentralized insurance application built on blockchain technology. It aims to provide an alternative and transparent approach to traditional insurance by leveraging the benefits of decentralization and smart contracts.
-
-## Features
-
-- Policy Creation: Users can create insurance policies by specifying coverage details, premiums, and expiration dates.
-- Policy Management: Users can view their active policies, track their coverage amounts, and monitor expiration dates.
-- Claim Submission: Users can submit insurance claims when covered events occur, following predefined conditions.
-- Claim Processing: Claims are automatically evaluated and processed based on the implemented smart contract logic.
-- Payouts: Approved claims result in automatic payout transfers to the insured parties.
+This is a decentralized insurance application built on Algorand blockchain technology. It aims to provide an alternative and transparent approach to traditional insurance by leveraging the benefits of decentralization and smart contracts.
 
 ## Problems with Traditional Insurance
 
-Traditional insurance has several limitations and issues:
+Traditional insurance has several limitations and issues such as:
 
 1. Lack of Transparency: Traditional insurance processes often lack transparency, making it challenging for policyholders to understand how premiums are calculated, claims are evaluated, and decisions are made.
 
-2. Slow Claim Processing: Traditional insurance claims often involve manual processes, leading to delays, bureaucracy, and disputes between the insurer and the insured.
+2. Slow Claim Processing: Traditional insurance claims often involve manual processes, leading to delays, and disputes between the insurer and the insured.
 
-3. Limited Access: Traditional insurance may exclude certain individuals or groups due to high premiums, lack of coverage options for specific risks, or geographical restrictions.
+3. Limited Access: Traditional insurance may exclude certain individuals or groups due to high premiums, bureaucracy, lack of coverage options for specific risks, or geographical restrictions.
 
 4. Trust Dependency: Traditional insurance relies on centralized entities, such as insurance companies, to administer policies, process claims, and handle funds. This centralized model can lead to issues of trust, potential conflicts of interest, and single points of failure.
 
@@ -36,16 +28,32 @@ A decentralized insurance solution offers several benefits:
 
 5. Elimination of Intermediaries: Decentralized insurance removes the need for traditional intermediaries, reducing costs, and increasing efficiency. This direct interaction between participants can result in lower premiums and faster payouts.
 
+
+## Go-Insure Features
+
+- Policy Creation: Users can create insurance policies.
+- Policy Management: Users can view their active policies, track their coverage amounts, and monitor expiration dates.
+- Claim Submission: Users can submit insurance claims when covered events occur, following predefined conditions.
+- Claim Processing: Claims are automatically evaluated and processed based on the implemented smart contract logic.
+- Payouts: Approved claims result in automatic payout transfers to the insured parties.
+
+
 ## Installation
 
 1. Clone the repository:
 
+git clone https://github.com/0xBitzz/Go-Insurance
+
 2. Install the necessary dependencies:
+
+npm install
 
 
 ## Usage
 
 1. Start the application:
+
+npm start
 
 2. Access the application in your web browser at `http://localhost:3000`.
 
@@ -55,10 +63,13 @@ A decentralized insurance solution offers several benefits:
 
 ## Dependencies
 
-- Solidity: version X.X.X
-- Truffle: version X.X.X
-- Web3.js: version X.X.X
-- React: version X.X.X
+- python: version 3.11.3
+- beaker-pyteal: version 1.0.1
+- py-algorand-sdk: version >=2.2.0,<3.0.0
+- beaker-ts: version ^0.0.95
+- algosdk: version 2.1.0
+- next-js: version 13.4.9
+- txnlab/use-wallet: version 2.0.0-alpha.5
 
 ## Contributing
 
