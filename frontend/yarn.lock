@@ -2134,10 +2134,10 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-beaker-ts@^0.0.90:
-  version "0.0.90"
-  resolved "https://registry.yarnpkg.com/beaker-ts/-/beaker-ts-0.0.90.tgz#849a9960ee9d31da2c5ec1380ae0eb4d108f37ea"
-  integrity sha512-JElXUPvGl0+oPZCfOaLlvwBgoQsP0mOa7q4g1ZXebvskIvRDsvfX4wcWVgoNIq5i5ZM9FQH0/QddCJo1+X5Lyg==
+beaker-ts@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/beaker-ts/-/beaker-ts-0.1.2.tgz#03381f6ecd11a1dcb82a4d0b100e1feb4ee3d479"
+  integrity sha512-PWjLRdZTsVeClgqwa5HD61UnvRTlJx2mx5Y53Ln4821LN5oJ/nrbhhDEfqOysOmA2+bVQT/B43c8XGjtbMKuOQ==
   dependencies:
     commander "^9.4.0"
     typescript "^4.7.4"
