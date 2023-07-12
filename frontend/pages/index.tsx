@@ -1,7 +1,7 @@
 // @ts-nocheck
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import algosdk, { getApplicationAddress } from "algosdk";
+import algosdk, { getApplicationAddress, microalgosToAlgos } from "algosdk";
 import { useState, useEffect } from "react";
 import { clients } from "beaker-ts";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import { shortenAddress } from "../helpers/shortenAddress";
 // import app client
 import { InsurancedApp } from "../app_client/insurancedapp_client";
 import { stringify } from "querystring";
+import { Policy } from "@/goInsure";
 
 // If you just need a placeholder signer
 const PlaceHolderSigner: algosdk.TransactionSigner = (
@@ -47,6 +48,7 @@ export default function Home() {
 
   const { activeAccount, activeAddress, providers, signer } = useWallet();
   const [connectModal, setConnectModal] = useState(false);
+  const [myPolicy, setMyPolicy] = useState([]);
 
   useEffect(() => {
     console.log(activeAccount, appId, algodClient);
@@ -63,6 +65,8 @@ export default function Home() {
         })
       );
     }
+
+    _getMyPolicy();
   }, [activeAccount]);
   const toggleConnectModal = () => {
     if (connectModal) {
@@ -121,24 +125,73 @@ export default function Home() {
     alert(`Created app: ${appId}`);
     setLoading(false);
   }
+  async function _getMyPolicy() {
+    const policy = await getMyPolicy();
+    console.log(policy);
+    setMyPolicy(policy);
+  }
+
+  async function getMyPolicy() {
+    const _policy = [];
+    for (let boxName of await appClient.getApplicationBoxNames()) {
+      console.log(boxName);
+      const result = await appClient.getApplicationBox(boxName);
+      console.log(result);
+      const resultCodec = algosdk.ABIType.from(
+        "(address,uint64,bool,uint64,uint64,string,uint64)"
+      );
+      const val = resultCodec.decode(result);
+      console.log(val);
+      let policy = {
+        premAmount: Number(val[1]),
+        activeStatus: val[2],
+        registrationDate: Number(val[3]),
+        expirationDate: Number(val[4]),
+        claimedStatus: val[5],
+        amountClaimed: Number(val[6]),
+      };
+      console.log(policy);
+      _policy.push(policy);
+    }
+    console.log(_policy);
+    return _policy;
+    // console.log(policy)
+    // return policy;
+    // const rawAddress = new Uint8Array(activeAccount.address)
+    // console.log(rawAddress)
+    // if(!activeAccount.address) { console.log("connect pls");return}
+    // const _address = activeAccount.address;
+    // console.log(activeAccount.address)
+    // const res = await appClient.get_policy({addr: String(activeAccount.address),
+    //     boxes: [
+    //       {
+    //         appIndex: appId,
+    //         name: algosdk.decodeAddress(activeAccount.address).publicKey,
+    //       },
+    //     ],
+    // });
+    // console.log(res);
+  }
 
   async function purchase_policy() {
     let _seed = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       from: activeAccount?.address ? activeAccount.address : "",
       suggestedParams: await algodClient.getTransactionParams().do(),
       to: getApplicationAddress(appId),
-      amount: 1000000n
-    })
+      amount: 1000000n,
+    });
 
     await appClient.bootstrap();
 
     const result = await appClient.purchase_policy(
-      { pay_txn: _seed},
+      { pay_txn: _seed },
       {
-        boxes: [{
-          appIndex: appId,
-          name: algosdk.decodeAddress(activeAccount.address).publicKey
-        }]
+        boxes: [
+          {
+            appIndex: appId,
+            name: algosdk.decodeAddress(activeAccount.address).publicKey,
+          },
+        ],
       }
     );
     console.log(result);
@@ -149,9 +202,6 @@ export default function Home() {
     <main className="">
       <button className="m-10" onClick={() => createApp()}>
         createApp
-      </button>
-      <button className="m-10" onClick={() => purchase_policy()}>
-      purchase_policy
       </button>
       {/* NAVBAR */}
       <header className="w-full px-32 py-8 font-medium flex justify-between items-center">
@@ -233,7 +283,7 @@ export default function Home() {
       <div className="flex justify-center p-20">
         <button
           className="bg-black text-white py-3 px-10 text-2xl"
-          onClick={() => {}}
+          onClick={() => purchase_policy()}
         >
           Purchase Policy
         </button>
@@ -291,6 +341,17 @@ export default function Home() {
         <h3 className="text-xl text-bold">Claim Status</h3>
         <h3 className="text-xl text-bold">Amount Claimed</h3>
       </div>
+      {myPolicy &&
+        myPolicy.map((policy) => (
+          <div className="flex justify-between align-center mt-6 mb-20 px-40 border-b-2">
+            <h3 className="text-xl text-bold">{microalgosToAlgos(policy.premAmount)}</h3>
+            <h3 className="text-xl text-bold">{policy.activeStatus ? "True" : "False"}</h3>
+            <h3 className="text-xl text-bold">{policy.registrationDate}</h3>
+            <h3 className="text-xl text-bold">{policy.expirationDate}</h3>
+            <h3 className="text-xl text-bold">{policy.claimedStatus}</h3>
+            <h3 className="text-xl text-bold">{policy.amountClaimed}</h3>
+          </div>
+        ))}
     </main>
   );
 }
