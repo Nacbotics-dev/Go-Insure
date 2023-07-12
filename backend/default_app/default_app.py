@@ -293,8 +293,6 @@ def review_claim(
 
 @go_insure_app.external
 def send_request(
-    time_of_event: abi.Uint64,
-    location_of_event: abi.String,
     box_name: abi.DynamicBytes,
     key: abi.DynamicBytes,
     token_asset_id: abi.Uint64,
@@ -304,17 +302,6 @@ def send_request(
     main_app_reference: abi.Application,
 ):
     return Seq(
-        (policy := Policy()).decode(go_insure_app.state.address_to_policy[Txn.sender()].get()),
-        (registration_date := abi.Uint64()).set(policy.registration_date),
-        (expiration_date := abi.Uint64()).set(policy.expiration_date),
-        # Ensure a valid location is entered
-        Assert(location_of_event.get() != Bytes("")),
-        # Ensure time of event is within the registration and expiration date window
-        Assert(
-            time_of_event.get() > registration_date.get(),
-            time_of_event.get() <= expiration_date.get(),
-        ),
-        go_insure_app.state.box_name.set(box_name.get()),
         # request_args
         Assert(MAIN_APP_ID == Txn.applications[1]),
         (request_tuple := abi.make(RequestSpec)).set(source_arr, agg_method, user_data),
@@ -397,15 +384,14 @@ def opt_in_gora(
 
 
 if __name__ == "__main__":
-    # params = yaml.safe_load(sys.argv[1])
-    # MAIN_APP_ID = Int(params["MAIN_APP_ID"])
-    # MAIN_APP_ADDRESS = Bytes(
-    #     algosdk.encoding.decode_address(
-    #         algosdk.logic.get_application_address(params["MAIN_APP_ID"])
-    #     )
-    # )
-    # DEMO_MODE = params["DEMO_MODE"]
-    # app_spec = go_insure_app.build(localnet.get_algod_client()).export(
-    #     default_app_path + "/artifacts/"
-    # )
-    go_insure_app.build()
+    params = yaml.safe_load(sys.argv[1])
+    MAIN_APP_ID = Int(params["MAIN_APP_ID"])
+    MAIN_APP_ADDRESS = Bytes(
+        algosdk.encoding.decode_address(
+            algosdk.logic.get_application_address(params["MAIN_APP_ID"])
+        )
+    )
+    DEMO_MODE = params["DEMO_MODE"]
+    app_spec = go_insure_app.build(localnet.get_algod_client()).export(
+        default_app_path + "/artifacts/"
+    )
