@@ -46,11 +46,34 @@
             "desc": "Buys a new property policy for an account.\nA new policy id is generated to identify the policy once purchased successfully."
         },
         {
-            "name": "verify_claim",
-            "args": [],
+            "name": "approve_claim",
+            "args": [
+                {
+                    "type": "address",
+                    "name": "receiver_addr"
+                },
+                {
+                    "type": "uint64",
+                    "name": "coverage_amt"
+                }
+            ],
             "returns": {
                 "type": "void"
-            }
+            },
+            "desc": "Approve policy claim"
+        },
+        {
+            "name": "reject_claim",
+            "args": [
+                {
+                    "type": "address",
+                    "name": "receiver_addr"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Reject a policy claim"
         },
         {
             "name": "review_claim",
