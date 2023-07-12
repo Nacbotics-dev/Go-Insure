@@ -57,10 +57,6 @@ npm start
 
 2. Access the application in your web browser at `http://localhost:3000`.
 
-## Configuration
-
-1. Modify the `config.js` file to customize the application settings, such as blockchain network configuration and oracle integration.
-
 ## Dependencies
 
 - python: version 3.11.3
@@ -70,15 +66,3 @@ npm start
 - algosdk: version 2.1.0
 - next-js: version 13.4.9
 - txnlab/use-wallet: version 2.0.0-alpha.5
-
-## Contributing
-
-Contributions to this project are welcome. To contribute, please follow the guidelines outlined in [CONTRIBUTING.md](link-to-contributing-file).
-
-## License
-
-This project is licensed under the [MIT License](link-to-license-file).
-
-## Contact
-
-For any inquiries or support, please contact [your-email@example.com](mailto:your-email@example.com).
