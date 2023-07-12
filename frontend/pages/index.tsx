@@ -125,6 +125,7 @@ export default function Home() {
       console.log(boxName);
       const result = await appClient.getApplicationBox(boxName);
       console.log(result);
+
       const resultCodec = algosdk.ABIType.from(
         "(address,uint64,bool,uint64,uint64,string,uint64)"
       );
@@ -139,7 +140,10 @@ export default function Home() {
         amountClaimed: Number(val[6]),
       };
       console.log(policy);
-      _policy.push(policy);
+      console.log(val[0]);
+      if (val[0] == activeAccount.address) {
+        _policy.push(policy);
+      }
     }
     console.log(_policy);
     return _policy;
@@ -395,7 +399,9 @@ export default function Home() {
             <h3 className="text-xl text-bold">{policy.registrationDate}</h3>
             <h3 className="text-xl text-bold">{policy.expirationDate}</h3>
             <h3 className="text-xl text-bold">{policy.claimedStatus}</h3>
-            <h3 className="text-xl text-bold">{microalgosToAlgos(policy.amountClaimed)}</h3>
+            <h3 className="text-xl text-bold">
+              {microalgosToAlgos(policy.amountClaimed)}
+            </h3>
           </div>
         ))}
     </main>
