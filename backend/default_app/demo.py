@@ -207,7 +207,7 @@ def demo() -> None:
     ]
     box_name_type = abi.ArrayStaticType(abi.ByteType(), 32)
 
-    default_app_client.call(default_app.bootstrap)
+    print(default_app_client.get_global_state())
 
     txn = PaymentTxn(
         sender=owner.address,
@@ -231,6 +231,31 @@ def demo() -> None:
         transaction_parameters=algokit_utils.OnCompleteCallParameters(
             signer=signer,
             sender=owner.address,
+            suggested_params=suggested_params,
+            boxes=[(default_app_id, encoding.decode_address(owner.address))],
+        ),
+        addr=owner.address,
+    )
+    print(result.return_value)
+
+    result = default_app_client.call(
+        default_app.reject_claim,
+        transaction_parameters=algokit_utils.OnCompleteCallParameters(
+            signer=signer,
+            sender=owner.address,
+            suggested_params=suggested_params,
+            boxes=[(default_app_id, encoding.decode_address(owner.address))],
+        ),
+        receiver_addr=owner.address,
+        # coverage_amt=int(consts.algo * .3)
+    )
+    import time; time.sleep(300)
+    result = default_app_client.call(
+        default_app.get_policy,
+        transaction_parameters=algokit_utils.OnCompleteCallParameters(
+            signer=signer,
+            sender=owner.address,
+            # note="new",
             suggested_params=suggested_params,
             boxes=[(default_app_id, encoding.decode_address(owner.address))],
         ),
