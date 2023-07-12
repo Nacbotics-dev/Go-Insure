@@ -59,9 +59,9 @@ npm start
 
 ## Dependencies
 
-- python: version 3.11.3
-- beaker-pyteal: version 1.0.1
-- py-algorand-sdk: version >=2.2.0,<3.0.0
+- python: version "3.11.3"
+- beaker-pyteal: "version 1.0.1"
+- py-algorand-sdk: version >=2.2.0,<3.0.0"
 - beaker-ts: version ^0.0.95
 - algosdk: version 2.1.0
 - next-js: version 13.4.9

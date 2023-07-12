@@ -238,7 +238,7 @@ def demo() -> None:
     )
     print(result.return_value)
 
-    # import sys; sys.exit(0)
+    import sys; sys.exit(0)
 
     # Make a request
     call_response = default_app_client.call(

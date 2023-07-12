@@ -1,59 +1,67 @@
 #pragma version 8
-intcblock 0 1 1000000 32 320 1578
-bytecblock 0x 0x626f785f6e616d65 0x696e7375726572 0x706f6c6963795f65787069726174696f6e5f64617465 0x00 0x636f7665726167655f616d6f756e74 0x50656e64696e67
+intcblock 0 1 1000000 32 300000 320 1995
+bytecblock 0x 0x626f785f6e616d65 0x696e7375726572 0x706f6c6963795f65787069726174696f6e5f64617465 0x00 0x636f7665726167655f616d6f756e74 0x77696e645f67757374 0x77696e645f7370656564 0x50656e64696e67
 txn NumAppArgs
 intc_0 // 0
 ==
-bnz main_l26
+bnz main_l24
 txna ApplicationArgs 0
 pushbytes 0x30c6d58a // "opt_in()void"
 ==
-bnz main_l25
+bnz main_l23
 txna ApplicationArgs 0
 pushbytes 0xa565e9b2 // "write_to_data_box(byte[],byte[])void"
 ==
-bnz main_l24
+bnz main_l22
 txna ApplicationArgs 0
 pushbytes 0xbec76d87 // "bootstrap()void"
 ==
-bnz main_l23
+bnz main_l21
 txna ApplicationArgs 0
 pushbytes 0xe4691ebd // "purchase_policy(pay)void"
 ==
-bnz main_l22
-txna ApplicationArgs 0
-pushbytes 0x2a94b9ee // "approve_claim(address,uint64)void"
-==
-bnz main_l21
-txna ApplicationArgs 0
-pushbytes 0x43483e31 // "reject_claim(address)void"
-==
 bnz main_l20
 txna ApplicationArgs 0
-pushbytes 0x6f1acd6d // "review_claim(byte[],byte[])void"
+pushbytes 0x6837a8c2 // "verify_claim()void"
 ==
 bnz main_l19
 txna ApplicationArgs 0
-pushbytes 0x2fc8515a // "send_request(uint64,string,byte[],byte[],uint64,(uint32,byte[],uint64)[],uint32,byte[],application)void"
+pushbytes 0x6f1acd6d // "review_claim(byte[],byte[])void"
 ==
 bnz main_l18
 txna ApplicationArgs 0
-pushbytes 0x88a176b2 // "get_policy(address)(address,uint64,bool,uint64,uint64,string,uint64)"
+pushbytes 0x7adb0c55 // "send_request(byte[],byte[],uint64,(uint32,byte[],uint64)[],uint32,byte[],application)void"
 ==
 bnz main_l17
 txna ApplicationArgs 0
-pushbytes 0x69bdcd84 // "update_coverage_amount(uint64)void"
+pushbytes 0x88a176b2 // "get_policy(address)(address,uint64,bool,uint64,uint64,string,uint64)"
 ==
 bnz main_l16
 txna ApplicationArgs 0
-pushbytes 0xaed5d0d6 // "update_expiration_timeline(uint64)void"
+pushbytes 0x69bdcd84 // "update_coverage_amount(uint64)void"
 ==
 bnz main_l15
 txna ApplicationArgs 0
-pushbytes 0x345d51fe // "opt_in_gora(asset,application)void"
+pushbytes 0xaed5d0d6 // "update_expiration_timeline(uint64)void"
 ==
 bnz main_l14
+txna ApplicationArgs 0
+pushbytes 0x345d51fe // "opt_in_gora(asset,application)void"
+==
+bnz main_l13
 err
+main_l13:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub optingoracaster_24
+intc_1 // 1
+return
 main_l14:
 txn OnCompletion
 intc_0 // NoOp
@@ -63,7 +71,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub optingoracaster_26
+callsub updateexpirationtimelinecaster_23
 intc_1 // 1
 return
 main_l15:
@@ -75,7 +83,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub updateexpirationtimelinecaster_25
+callsub updatecoverageamountcaster_22
 intc_1 // 1
 return
 main_l16:
@@ -87,7 +95,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub updatecoverageamountcaster_24
+callsub getpolicycaster_21
 intc_1 // 1
 return
 main_l17:
@@ -99,7 +107,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub getpolicycaster_23
+callsub sendrequestcaster_20
 intc_1 // 1
 return
 main_l18:
@@ -111,7 +119,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub sendrequestcaster_22
+callsub reviewclaimcaster_19
 intc_1 // 1
 return
 main_l19:
@@ -123,7 +131,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub reviewclaimcaster_21
+callsub verifyclaimcaster_18
 intc_1 // 1
 return
 main_l20:
@@ -135,7 +143,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub rejectclaimcaster_20
+callsub purchasepolicycaster_17
 intc_1 // 1
 return
 main_l21:
@@ -147,7 +155,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub approveclaimcaster_19
+callsub bootstrapcaster_16
 intc_1 // 1
 return
 main_l22:
@@ -159,34 +167,10 @@ intc_0 // 0
 !=
 &&
 assert
-callsub purchasepolicycaster_18
+callsub writetodataboxcaster_15
 intc_1 // 1
 return
 main_l23:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub bootstrapcaster_17
-intc_1 // 1
-return
-main_l24:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub writetodataboxcaster_16
-intc_1 // 1
-return
-main_l25:
 txn OnCompletion
 intc_1 // OptIn
 ==
@@ -195,20 +179,20 @@ intc_0 // 0
 !=
 &&
 assert
-callsub optincaster_15
+callsub optincaster_14
 intc_1 // 1
 return
-main_l26:
+main_l24:
 txn OnCompletion
 intc_0 // NoOp
 ==
-bnz main_l30
+bnz main_l28
 txn OnCompletion
 pushint 5 // DeleteApplication
 ==
-bnz main_l29
+bnz main_l27
 err
-main_l29:
+main_l27:
 txn ApplicationID
 intc_0 // 0
 !=
@@ -216,7 +200,7 @@ assert
 callsub delete_3
 intc_1 // 1
 return
-main_l30:
+main_l28:
 txn ApplicationID
 intc_0 // 0
 ==
@@ -314,13 +298,19 @@ bytec_1 // "box_name"
 bytec_0 // ""
 app_global_put
 bytec 5 // "coverage_amount"
-pushint 5000000 // 5000000
+intc 4 // 300000
 app_global_put
 bytec_2 // "insurer"
 bytec_0 // ""
 app_global_put
 bytec_3 // "policy_expiration_date"
 pushint 31536000 // 31536000
+app_global_put
+bytec 6 // "wind_gust"
+pushint 100 // 100
+app_global_put
+bytec 7 // "wind_speed"
+pushint 75 // 75
 app_global_put
 bytec_2 // "insurer"
 global CurrentApplicationAddress
@@ -396,7 +386,7 @@ bytec_3 // "policy_expiration_date"
 app_global_get
 +
 frame_bury 4
-bytec 6 // "Pending"
+bytec 8 // "Pending"
 frame_bury 5
 frame_dig 5
 len
@@ -446,9 +436,9 @@ frame_dig 7
 box_put
 retsub
 
-// approve_claim
-approveclaim_7:
-proto 2 0
+// verify_claim
+verifyclaim_7:
+proto 0 0
 bytec_0 // ""
 dup
 intc_0 // 0
@@ -458,8 +448,106 @@ dup
 intc_0 // 0
 dupn 2
 bytec_0 // ""
+dupn 3
+intc_0 // 0
+dupn 3
+bytec_0 // ""
+intc_0 // 0
+bytec_0 // ""
+intc_0 // 0
 dup
-frame_dig -2
+bytec_0 // ""
+dup
+bytec 7 // "wind_speed"
+app_global_get
+pushint 75 // 75
+>=
+bytec 6 // "wind_gust"
+app_global_get
+pushint 100 // 100
+>=
+&&
+bnz verifyclaim_7_l2
+txn Sender
+box_get
+store 3
+store 2
+load 3
+assert
+load 2
+frame_bury 13
+frame_dig 13
+extract 0 32
+frame_bury 14
+frame_dig 13
+intc_3 // 32
+extract_uint64
+frame_bury 15
+frame_dig 13
+intc 5 // 320
+getbit
+frame_bury 16
+frame_dig 13
+pushint 41 // 41
+extract_uint64
+frame_bury 17
+frame_dig 13
+pushint 49 // 49
+extract_uint64
+frame_bury 18
+pushbytes 0x52656a6563746564 // "Rejected"
+frame_bury 19
+frame_dig 19
+len
+itob
+extract 6 0
+frame_dig 19
+concat
+frame_bury 19
+frame_dig 13
+pushint 59 // 59
+extract_uint64
+frame_bury 20
+frame_dig 14
+frame_dig 15
+itob
+concat
+bytec 4 // 0x00
+intc_0 // 0
+frame_dig 16
+setbit
+concat
+frame_dig 17
+itob
+concat
+frame_dig 18
+itob
+concat
+frame_dig 19
+frame_bury 25
+frame_dig 25
+frame_bury 24
+pushint 67 // 67
+frame_bury 22
+frame_dig 22
+itob
+extract 6 0
+concat
+frame_dig 20
+itob
+concat
+frame_dig 24
+concat
+frame_bury 21
+txn Sender
+box_del
+pop
+txn Sender
+frame_dig 21
+box_put
+b verifyclaim_7_l3
+verifyclaim_7_l2:
+txn Sender
 box_get
 store 1
 store 0
@@ -475,7 +563,7 @@ intc_3 // 32
 extract_uint64
 frame_bury 2
 frame_dig 0
-intc 4 // 320
+intc 5 // 320
 getbit
 frame_bury 3
 frame_dig 0
@@ -495,7 +583,7 @@ len
 substring3
 frame_bury 6
 frame_dig 1
-frame_dig -2
+txn Sender
 ==
 assert
 frame_dig 2
@@ -508,15 +596,15 @@ intc_1 // 1
 assert
 frame_dig 6
 extract 2 0
-bytec 6 // "Pending"
+bytec 8 // "Pending"
 ==
 assert
 itxn_begin
 intc_1 // pay
 itxn_field TypeEnum
-frame_dig -2
+txn Sender
 itxn_field Receiver
-frame_dig -1
+intc 4 // 300000
 itxn_field Amount
 itxn_submit
 pushbytes 0x417070726f766564 // "Approved"
@@ -528,7 +616,7 @@ extract 6 0
 frame_dig 7
 concat
 frame_bury 7
-frame_dig -1
+intc 4 // 300000
 frame_bury 8
 frame_dig 1
 frame_dig 2
@@ -561,109 +649,17 @@ concat
 frame_dig 11
 concat
 frame_bury 0
-frame_dig -2
-box_del
-pop
-frame_dig -2
-frame_dig 0
-box_put
-retsub
-
-// reject_claim
-rejectclaim_8:
-proto 1 0
-bytec_0 // ""
-dup
-intc_0 // 0
-dupn 3
-bytec_0 // ""
-intc_0 // 0
-bytec_0 // ""
-intc_0 // 0
-dup
-bytec_0 // ""
-dup
-frame_dig -1
-box_get
-store 3
-store 2
-load 3
-assert
-load 2
-frame_bury 0
-frame_dig 0
-extract 0 32
-frame_bury 1
-frame_dig 0
-intc_3 // 32
-extract_uint64
-frame_bury 2
-frame_dig 0
-intc 4 // 320
-getbit
-frame_bury 3
-frame_dig 0
-pushint 41 // 41
-extract_uint64
-frame_bury 4
-frame_dig 0
-pushint 49 // 49
-extract_uint64
-frame_bury 5
-pushbytes 0x52656a6563746564 // "Rejected"
-frame_bury 6
-frame_dig 6
-len
-itob
-extract 6 0
-frame_dig 6
-concat
-frame_bury 6
-frame_dig 0
-pushint 59 // 59
-extract_uint64
-frame_bury 7
-frame_dig 1
-frame_dig 2
-itob
-concat
-bytec 4 // 0x00
-intc_0 // 0
-frame_dig 3
-setbit
-concat
-frame_dig 4
-itob
-concat
-frame_dig 5
-itob
-concat
-frame_dig 6
-frame_bury 12
-frame_dig 12
-frame_bury 11
-pushint 67 // 67
-frame_bury 9
-frame_dig 9
-itob
-extract 6 0
-concat
-frame_dig 7
-itob
-concat
-frame_dig 11
-concat
-frame_bury 8
 txn Sender
 box_del
 pop
 txn Sender
-frame_dig 8
+frame_dig 0
 box_put
+verifyclaim_7_l3:
 retsub
 
 // review_claim
-reviewclaim_9:
+reviewclaim_8:
 proto 2 0
 frame_dig -2
 frame_dig -1
@@ -671,11 +667,8 @@ callsub writetodatabox_4
 retsub
 
 // send_request
-sendrequest_10:
-proto 9 0
-bytec_0 // ""
-intc_0 // 0
-dup
+sendrequest_9:
+proto 7 0
 bytec_0 // ""
 dupn 3
 intc_0 // 0
@@ -713,59 +706,26 @@ dup
 bytec_0 // ""
 dup
 intc_0 // 0
-txn Sender
-box_get
-store 5
-store 4
-load 5
-assert
-load 4
-frame_bury 0
-frame_dig 0
-pushint 41 // 41
-extract_uint64
-frame_bury 1
-frame_dig 0
-pushint 49 // 49
-extract_uint64
-frame_bury 2
-frame_dig -8
-extract 2 0
-bytec_0 // ""
-!=
-assert
-frame_dig -9
-frame_dig 1
->
-assert
-frame_dig -9
-frame_dig 2
-<=
-assert
-bytec_1 // "box_name"
-frame_dig -7
-extract 2 0
-app_global_put
-intc 5 // 1578
+intc 6 // 1995
 txna Applications 1
 ==
 assert
 frame_dig -4
-frame_bury 10
-frame_dig 10
-frame_bury 9
-pushint 8 // 8
 frame_bury 7
 frame_dig 7
-frame_dig 10
+frame_bury 6
+pushint 8 // 8
+frame_bury 4
+frame_dig 4
+frame_dig 7
 len
 +
-frame_bury 8
-frame_dig 8
+frame_bury 5
+frame_dig 5
 pushint 65536 // 65536
 <
 assert
-frame_dig 7
+frame_dig 4
 itob
 extract 6 0
 frame_dig -3
@@ -773,141 +733,141 @@ itob
 extract 4 0
 concat
 frame_dig -2
-frame_bury 10
-frame_dig 9
-frame_dig 10
-concat
-frame_bury 9
-frame_dig 8
 frame_bury 7
+frame_dig 6
 frame_dig 7
+concat
+frame_bury 6
+frame_dig 5
+frame_bury 4
+frame_dig 4
 itob
 extract 6 0
 concat
-frame_dig 9
+frame_dig 6
 concat
-frame_bury 6
+frame_bury 3
 txna Applications 0
-frame_bury 11
+frame_bury 8
 pushbytes 0x7265766965775f636c61696d28627974655b5d2c627974655b5d29766f6964 // "review_claim(byte[],byte[])void"
-frame_bury 12
-frame_dig 12
+frame_bury 9
+frame_dig 9
 len
 itob
 extract 6 0
-frame_dig 12
+frame_dig 9
 concat
-frame_bury 12
-frame_dig 11
+frame_bury 9
+frame_dig 8
 itob
-frame_dig 12
-frame_bury 18
-frame_dig 18
-frame_bury 17
-pushint 10 // 10
+frame_dig 9
 frame_bury 15
 frame_dig 15
+frame_bury 14
+pushint 10 // 10
+frame_bury 12
+frame_dig 12
 itob
 extract 6 0
 concat
-frame_dig 17
+frame_dig 14
 concat
-frame_bury 14
+frame_bury 11
 intc_1 // 1
-frame_bury 19
+frame_bury 16
 global CurrentApplicationID
-frame_bury 20
-frame_dig 20
+frame_bury 17
+frame_dig 17
 itob
-frame_bury 21
+frame_bury 18
 frame_dig -5
 itob
-frame_bury 26
+frame_bury 23
 global CurrentApplicationAddress
-frame_bury 31
-frame_dig 31
+frame_bury 28
+frame_dig 28
 len
 intc_3 // 32
 ==
 assert
-frame_dig 31
-frame_bury 32
+frame_dig 28
+frame_bury 29
 frame_dig -7
-frame_bury 42
-frame_dig 42
-frame_bury 41
-pushint 10 // 10
 frame_bury 39
 frame_dig 39
-itob
-extract 6 0
-frame_dig 20
-itob
-concat
-frame_dig 41
-concat
 frame_bury 38
-intc_1 // 1
-frame_bury 49
-frame_dig 49
+pushint 10 // 10
+frame_bury 36
+frame_dig 36
 itob
 extract 6 0
+frame_dig 17
+itob
+concat
 frame_dig 38
-frame_bury 48
-frame_dig 48
-frame_bury 47
-pushint 2 // 2
+concat
+frame_bury 35
+intc_1 // 1
+frame_bury 46
+frame_dig 46
+itob
+extract 6 0
+frame_dig 35
 frame_bury 45
 frame_dig 45
+frame_bury 44
+pushint 2 // 2
+frame_bury 42
+frame_dig 42
 itob
 extract 6 0
-frame_dig 47
+frame_dig 44
 concat
 concat
-frame_bury 44
+frame_bury 41
 itxn_begin
 pushint 6 // appl
 itxn_field TypeEnum
-intc 5 // 1578
+intc 6 // 1995
 itxn_field ApplicationID
 pushbytes 0x6f6ae98b // "request(byte[],byte[],uint64,byte[],uint64[],uint64[],address[],(byte[],uint64)[])void"
 itxn_field ApplicationArgs
-frame_dig 6
+frame_dig 3
 itxn_field ApplicationArgs
-frame_dig 14
+frame_dig 11
 itxn_field ApplicationArgs
-frame_dig 19
+frame_dig 16
 itob
 itxn_field ApplicationArgs
 frame_dig -6
 itxn_field ApplicationArgs
-frame_dig 21
+frame_dig 18
 itxn_field ApplicationArgs
-frame_dig 26
+frame_dig 23
 itxn_field ApplicationArgs
-frame_dig 32
+frame_dig 29
 itxn_field ApplicationArgs
-frame_dig 44
+frame_dig 41
 itxn_field ApplicationArgs
 itxn_submit
 retsub
 
 // get_policy
-getpolicy_11:
+getpolicy_10:
 proto 1 1
 bytec_0 // ""
 frame_dig -1
 box_get
-store 7
-store 6
-load 7
+store 5
+store 4
+load 5
 assert
-load 6
+load 4
 frame_bury 0
 retsub
 
 // update_coverage_amount
-updatecoverageamount_12:
+updatecoverageamount_11:
 proto 1 0
 txn Sender
 global CreatorAddress
@@ -920,7 +880,7 @@ app_global_put
 retsub
 
 // update_expiration_timeline
-updateexpirationtimeline_13:
+updateexpirationtimeline_12:
 proto 1 0
 txn Sender
 global CreatorAddress
@@ -933,7 +893,7 @@ app_global_put
 retsub
 
 // opt_in_gora
-optingora_14:
+optingora_13:
 proto 2 0
 txn Sender
 global CreatorAddress
@@ -946,13 +906,13 @@ callsub optin_0
 retsub
 
 // opt_in_caster
-optincaster_15:
+optincaster_14:
 proto 0 0
 callsub optin_2
 retsub
 
 // write_to_data_box_caster
-writetodataboxcaster_16:
+writetodataboxcaster_15:
 proto 0 0
 bytec_0 // ""
 dup
@@ -966,13 +926,13 @@ callsub writetodatabox_4
 retsub
 
 // bootstrap_caster
-bootstrapcaster_17:
+bootstrapcaster_16:
 proto 0 0
 callsub bootstrap_5
 retsub
 
 // purchase_policy_caster
-purchasepolicycaster_18:
+purchasepolicycaster_17:
 proto 0 0
 intc_0 // 0
 txn GroupIndex
@@ -988,33 +948,14 @@ frame_dig 0
 callsub purchasepolicy_6
 retsub
 
-// approve_claim_caster
-approveclaimcaster_19:
+// verify_claim_caster
+verifyclaimcaster_18:
 proto 0 0
-bytec_0 // ""
-intc_0 // 0
-txna ApplicationArgs 1
-frame_bury 0
-txna ApplicationArgs 2
-btoi
-frame_bury 1
-frame_dig 0
-frame_dig 1
-callsub approveclaim_7
-retsub
-
-// reject_claim_caster
-rejectclaimcaster_20:
-proto 0 0
-bytec_0 // ""
-txna ApplicationArgs 1
-frame_bury 0
-frame_dig 0
-callsub rejectclaim_8
+callsub verifyclaim_7
 retsub
 
 // review_claim_caster
-reviewclaimcaster_21:
+reviewclaimcaster_19:
 proto 0 0
 bytec_0 // ""
 dup
@@ -1024,44 +965,38 @@ txna ApplicationArgs 2
 frame_bury 1
 frame_dig 0
 frame_dig 1
-callsub reviewclaim_9
+callsub reviewclaim_8
 retsub
 
 // send_request_caster
-sendrequestcaster_22:
+sendrequestcaster_20:
 proto 0 0
-intc_0 // 0
 bytec_0 // ""
-dupn 2
+dup
 intc_0 // 0
 bytec_0 // ""
 intc_0 // 0
 bytec_0 // ""
 intc_0 // 0
 txna ApplicationArgs 1
-btoi
 frame_bury 0
 txna ApplicationArgs 2
 frame_bury 1
 txna ApplicationArgs 3
+btoi
 frame_bury 2
 txna ApplicationArgs 4
 frame_bury 3
 txna ApplicationArgs 5
-btoi
+intc_0 // 0
+extract_uint32
 frame_bury 4
 txna ApplicationArgs 6
 frame_bury 5
 txna ApplicationArgs 7
 intc_0 // 0
-extract_uint32
-frame_bury 6
-txna ApplicationArgs 8
-frame_bury 7
-txna ApplicationArgs 9
-intc_0 // 0
 getbyte
-frame_bury 8
+frame_bury 6
 frame_dig 0
 frame_dig 1
 frame_dig 2
@@ -1069,20 +1004,18 @@ frame_dig 3
 frame_dig 4
 frame_dig 5
 frame_dig 6
-frame_dig 7
-frame_dig 8
-callsub sendrequest_10
+callsub sendrequest_9
 retsub
 
 // get_policy_caster
-getpolicycaster_23:
+getpolicycaster_21:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub getpolicy_11
+callsub getpolicy_10
 frame_bury 0
 pushbytes 0x151f7c75 // 0x151f7c75
 frame_dig 0
@@ -1091,29 +1024,29 @@ log
 retsub
 
 // update_coverage_amount_caster
-updatecoverageamountcaster_24:
+updatecoverageamountcaster_22:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
 btoi
 frame_bury 0
 frame_dig 0
-callsub updatecoverageamount_12
+callsub updatecoverageamount_11
 retsub
 
 // update_expiration_timeline_caster
-updateexpirationtimelinecaster_25:
+updateexpirationtimelinecaster_23:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
 btoi
 frame_bury 0
 frame_dig 0
-callsub updateexpirationtimeline_13
+callsub updateexpirationtimeline_12
 retsub
 
 // opt_in_gora_caster
-optingoracaster_26:
+optingoracaster_24:
 proto 0 0
 intc_0 // 0
 dup
@@ -1127,5 +1060,5 @@ getbyte
 frame_bury 1
 frame_dig 0
 frame_dig 1
-callsub optingora_14
+callsub optingora_13
 retsub

@@ -7,6 +7,7 @@ from beaker import Application, Authorize, BuildOptions, GlobalStateValue, local
 from beaker.consts import TRUE
 from beaker.lib.storage import BoxMapping
 from pyteal import (
+    And,
     Assert,
     Balance,
     Bytes,
@@ -62,10 +63,10 @@ REJECTED = Bytes("Rejected")
 
 class Policy(abi.NamedTuple):
     customer_address: abi.Field[abi.Address]
-    premium_amount: abi.Field[abi.Uint64] # 1A
+    premium_amount: abi.Field[abi.Uint64]  # 1A
     active_status: abi.Field[abi.Bool]
     registration_date: abi.Field[abi.Uint64]
-    expiration_date: abi.Field[abi.Uint64] # 1yr
+    expiration_date: abi.Field[abi.Uint64]  # 1yr
     claim_status: abi.Field[abi.String]
     amount_claimed: abi.Field[abi.Uint64]
 
@@ -86,6 +87,12 @@ class PolicyState:
         descr="Expiration of policy. Default is set to yearly.",
     )
     address_to_policy = BoxMapping(abi.Address, Policy)
+    wind_speed = GlobalStateValue(
+        stack_type=TealType.uint64, default=Int(75), descr="Current wind speed"
+    )
+    wind_gust = GlobalStateValue(
+        stack_type=TealType.uint64, default=Int(100), descr="Current wind gust"
+    )
 
 
 go_insure_app = Application(
@@ -209,7 +216,9 @@ def approve_claim(
 ) -> Expr:
     """Approve policy claim"""
     return Seq(
-        (policy := Policy()).decode(go_insure_app.state.address_to_policy[receiver_addr].get()),
+        (policy := Policy()).decode(
+            go_insure_app.state.address_to_policy[receiver_addr].get()
+        ),
         (customer_address := abi.Address()).set(policy.customer_address),
         (premium_amount := abi.Uint64()).set(policy.premium_amount),
         (active_status := abi.Bool()).set(policy.active_status),
@@ -246,7 +255,9 @@ def approve_claim(
 def reject_claim(receiver_addr: abi.Address) -> Expr:
     """Reject a policy claim"""
     return Seq(
-        (policy := Policy()).decode(go_insure_app.state.address_to_policy[receiver_addr].get()),
+        (policy := Policy()).decode(
+            go_insure_app.state.address_to_policy[receiver_addr].get()
+        ),
         (customer_address := abi.Address()).set(policy.customer_address),
         (premium_amount := abi.Uint64()).set(policy.premium_amount),
         (active_state := abi.Bool()).set(policy.active_status),
