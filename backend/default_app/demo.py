@@ -249,7 +249,7 @@ def demo() -> None:
         receiver_addr=owner.address,
         # coverage_amt=int(consts.algo * .3)
     )
-    import time; time.sleep(300)
+
     result = default_app_client.call(
         default_app.get_policy,
         transaction_parameters=algokit_utils.OnCompleteCallParameters(
