@@ -11,6 +11,7 @@ import { shortenAddress } from "../helpers/shortenAddress";
 import { InsurancedApp } from "../app_client/insurancedapp_client";
 import { stringify } from "querystring";
 import { Policy } from "@/goInsure";
+import { makeCall } from "../request";
 
 // If you just need a placeholder signer
 const PlaceHolderSigner: algosdk.TransactionSigner = (
@@ -33,7 +34,7 @@ const AnonClient = (client: algosdk.Algodv2, appId: number): InsurancedApp => {
 };
 
 export default function Home() {
-  const [appId, setAppId] = useState<number>(256047612);
+  const [appId, setAppId] = useState<number>(256397354);
   // Setup config for client/network.
   const [apiProvider, setApiProvider] = useState(clients.APIProvider.AlgoNode);
   const [network, setNetwork] = useState(clients.Network.TestNet);
@@ -49,6 +50,10 @@ export default function Home() {
   const { activeAccount, activeAddress, providers, signer } = useWallet();
   const [connectModal, setConnectModal] = useState(false);
   const [myPolicy, setMyPolicy] = useState([]);
+  const [area, setArea] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [dateTime, setDateTime] = useState("");
 
   useEffect(() => {
     console.log(activeAccount, appId, algodClient);
@@ -99,24 +104,7 @@ export default function Home() {
     setLoading(true);
     console.log(appClient);
     const { appId, appAddress, txId } = await appClient.create();
-
-    // new InsurancedAppClient(
-    //   {
-    //     app: APP_SPEC,
-    //     sender: activeAccount.address,
-    //     resolveBy: "id",
-    //     id: 0,
-
-    //   },
-    //   algodClient
-    // )
-    // const isMainNet = await algokit.isLocalNet(algod);
-    // const app = await appClient.deploy({
-    //   allowDelete: isMainNet,
-    //   allowUpdate: isMainNet,
-    //   onSchemaBreak: !isMainNet ? "append" : "replace",
-    //   onUpdate: !isMainNet ? "append" : "update",
-    // });
+    await appClient.bootstrap();
 
     console.log(appId);
     console.log(appAddress);
@@ -173,6 +161,46 @@ export default function Home() {
     // console.log(res);
   }
 
+  async function claim_policy(area, state, country, dateTime) {
+    if (area && state && country && dateTime) {
+      const result = await makeCall(area, state, country, dateTime);
+      console.log(result);
+
+      if (result?.windSpeed >= 75 && result?.windGust >= 100) {
+        const result = await appClient.approve_claim(
+          {
+            receiver_addr: String(activeAccount.address),
+            coverage_amt: BigInt(5000000n),
+          },
+          {
+            boxes: [
+              {
+                appIndex: appId,
+                name: algosdk.decodeAddress(activeAccount.address).publicKey,
+              },
+            ],
+          }
+        );
+        console.log(result);
+      } else {
+        const result = await appClient.approve_claim(
+          { receiver_addr: String(activeAccount.address) },
+          {
+            boxes: [
+              {
+                appIndex: appId,
+                name: algosdk.decodeAddress(activeAccount.address).publicKey,
+              },
+            ],
+          }
+        );
+        console.log(result);
+      }
+    }
+
+    _getMyPolicy();
+  }
+
   async function purchase_policy() {
     let _seed = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       from: activeAccount?.address ? activeAccount.address : "",
@@ -180,8 +208,6 @@ export default function Home() {
       to: getApplicationAddress(appId),
       amount: 1000000n,
     });
-
-    await appClient.bootstrap();
 
     const result = await appClient.purchase_policy(
       { pay_txn: _seed },
@@ -196,13 +222,14 @@ export default function Home() {
     );
     console.log(result);
 
-    // _getFundings()
+    _getMyPolicy();
   }
+
   return (
     <main className="">
-      <button className="m-10" onClick={() => createApp()}>
+      {/* <button className="m-10" onClick={() => createApp()}>
         createApp
-      </button>
+      </button> */}
       {/* NAVBAR */}
       <header className="w-full px-32 py-8 font-medium flex justify-between items-center">
         <h2 className="font-bold text-2xl">GO-INSURE</h2>
@@ -298,6 +325,9 @@ export default function Home() {
                 type="text"
                 placeholder="Area"
                 className="py-3 px-10 border-2 rounded-lg"
+                onChange={(e) => {
+                  setArea(e.target.value);
+                }}
               />
             </div>
             <div className="mb-4">
@@ -305,6 +335,9 @@ export default function Home() {
                 type="text"
                 placeholder="State"
                 className="py-3 px-10 border-2 rounded-lg"
+                onChange={(e) => {
+                  setState(e.target.value);
+                }}
               />
             </div>
             <div className="mb-4">
@@ -312,6 +345,9 @@ export default function Home() {
                 type="text"
                 placeholder="Country"
                 className="py-3 px-10 border-2 rounded-lg"
+                onChange={(e) => {
+                  setCountry(e.target.value);
+                }}
               />
             </div>
             <div className="mb-4">
@@ -319,10 +355,16 @@ export default function Home() {
                 type="text"
                 placeholder="DateTime"
                 className="py-3 px-10 border-2 rounded-lg"
+                onChange={(e) => {
+                  setDateTime(e.target.value);
+                }}
               />
             </div>
           </div>
-          <button className="border-2 mt-4 p-4 text-2xl" onClick={() => {}}>
+          <button
+            className="border-2 mt-4 p-4 text-2xl"
+            onClick={() => claim_policy(area, state, country, dateTime)}
+          >
             Claim Policy
           </button>
         </div>
@@ -344,12 +386,16 @@ export default function Home() {
       {myPolicy &&
         myPolicy.map((policy) => (
           <div className="flex justify-between align-center mt-6 mb-20 px-40 border-b-2">
-            <h3 className="text-xl text-bold">{microalgosToAlgos(policy.premAmount)}</h3>
-            <h3 className="text-xl text-bold">{policy.activeStatus ? "True" : "False"}</h3>
+            <h3 className="text-xl text-bold">
+              {microalgosToAlgos(policy.premAmount)}
+            </h3>
+            <h3 className="text-xl text-bold">
+              {policy.activeStatus ? "True" : "False"}
+            </h3>
             <h3 className="text-xl text-bold">{policy.registrationDate}</h3>
             <h3 className="text-xl text-bold">{policy.expirationDate}</h3>
             <h3 className="text-xl text-bold">{policy.claimedStatus}</h3>
-            <h3 className="text-xl text-bold">{policy.amountClaimed}</h3>
+            <h3 className="text-xl text-bold">{microalgosToAlgos(policy.amountClaimed)}</h3>
           </div>
         ))}
     </main>

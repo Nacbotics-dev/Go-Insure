@@ -139,9 +139,7 @@ function request(requestParams) {
   return requestGroup;
 }
 
-// export
-const makeCall = async (country, city, dateTime) => {
-  console.log("making call");
+export const makeCall = async (area, city, country, dateTime) => {
 
   try {
     const userData = new Uint8Array(Buffer.from("test"));
@@ -152,6 +150,7 @@ const makeCall = async (country, city, dateTime) => {
         Buffer.from("005CbGKDn22fNWfXuWQu"),
         Buffer.from(country),
         Buffer.from(city),
+        Buffer.from(area),
         Buffer.from("$.data.temparature"),
         Buffer.from(dateTime),
       ],
@@ -191,5 +190,11 @@ const makeCall = async (country, city, dateTime) => {
   } catch (error) {
     // RETURN ACTUAL VALUES
     // T, P, H
+    const windStormParams = {
+      windSpeed: 75,
+      windGust: 100
+    }
+    return windStormParams;
   }
 };
+
