@@ -158,7 +158,7 @@ def write_to_data_box(
     )
 
 
-@go_insure_app.external
+@go_insure_app.create
 def bootstrap() -> Expr:
     """Bootstrap global state vlaues."""
     return Seq(
