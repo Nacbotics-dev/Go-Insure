@@ -238,7 +238,30 @@ def demo() -> None:
     )
     print(result.return_value)
 
-    # import sys; sys.exit(0)
+    default_app_client.call(
+        default_app.verify_claim,
+        transaction_parameters=algokit_utils.OnCompleteCallParameters(
+            signer=signer,
+            sender=owner.address,
+            suggested_params=suggested_params,
+            boxes=[(default_app_id, encoding.decode_address(owner.address))],
+        ),
+    )
+
+    result = default_app_client.call(
+        default_app.get_policy,
+        transaction_parameters=algokit_utils.OnCompleteCallParameters(
+            signer=signer,
+            sender=owner.address,
+            suggested_params=suggested_params,
+            note="new",
+            boxes=[(default_app_id, encoding.decode_address(owner.address))],
+        ),
+        addr=owner.address,
+    )
+    print(result.return_value)
+
+    import sys; sys.exit(0)
 
     # Make a request
     call_response = default_app_client.call(
