@@ -57,10 +57,6 @@ npm start
 
 2. Access the application in your web browser at `http://localhost:3000`.
 
-## Configuration
-
-1. Modify the `config.js` file to customize the application settings, such as blockchain network configuration and oracle integration.
-
 ## Dependencies
 
 - python: version "3.11.3"

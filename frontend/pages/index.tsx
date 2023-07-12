@@ -1,14 +1,15 @@
 // @ts-nocheck
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import algosdk from "algosdk";
+import algosdk, { getApplicationAddress } from "algosdk";
 import { useState, useEffect } from "react";
 import { clients } from "beaker-ts";
 import Link from "next/link";
 import { useWallet } from "@txnlab/use-wallet";
 import { shortenAddress } from "../helpers/shortenAddress";
-
-import { Insurance } from "../app_client/insurance dapp_client";
+// import app client
+import { InsurancedApp } from "../app_client/insurancedapp_client";
+import { stringify } from "querystring";
 
 // If you just need a placeholder signer
 const PlaceHolderSigner: algosdk.TransactionSigner = (
@@ -20,8 +21,8 @@ const PlaceHolderSigner: algosdk.TransactionSigner = (
 
 // AnonClient can still allow reads for an app but no transactions
 // can be signed
-const AnonClient = (client: algosdk.Algodv2, appId: number): Insurance => {
-  return new Insurance({
+const AnonClient = (client: algosdk.Algodv2, appId: number): InsurancedApp => {
+  return new InsurancedApp({
     // @ts-ignore
     client: client,
     signer: PlaceHolderSigner,
@@ -31,7 +32,7 @@ const AnonClient = (client: algosdk.Algodv2, appId: number): Insurance => {
 };
 
 export default function Home() {
-  const [appId, setAppId] = useState<number>(171237480);
+  const [appId, setAppId] = useState<number>(256047612);
   // Setup config for client/network.
   const [apiProvider, setApiProvider] = useState(clients.APIProvider.AlgoNode);
   const [network, setNetwork] = useState(clients.Network.TestNet);
@@ -40,7 +41,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   // Init our app client
-  const [appClient, setAppClient] = useState<Insurance>(
+  const [appClient, setAppClient] = useState<InsurancedApp>(
     AnonClient(algodClient, appId)
   );
 
@@ -51,10 +52,10 @@ export default function Home() {
     console.log(activeAccount, appId, algodClient);
     // Bad way to track connected status but...
     if (activeAccount === null && appClient.sender !== "") {
-      setAppClient(AnonClient(algodClient, appId));
+      setAppClient(AnonClient(algodClient /*, appId*/));
     } else if (activeAccount && activeAccount.address != appClient.sender) {
       setAppClient(
-        new Insurance({
+        new InsurancedApp({
           client: algodClient,
           signer: signer,
           sender: activeAccount.address,
@@ -62,7 +63,6 @@ export default function Home() {
         })
       );
     }
-    // _getFundings();
   }, [activeAccount]);
   const toggleConnectModal = () => {
     if (connectModal) {
@@ -87,11 +87,33 @@ export default function Home() {
   async function createApp() {
     if (!activeAddress) {
       console.log("please connect wallet");
-      return
+      return;
     }
+    console.log("activeAddress");
+
+    console.log(activeAddress);
     setLoading(true);
     console.log(appClient);
     const { appId, appAddress, txId } = await appClient.create();
+
+    // new InsurancedAppClient(
+    //   {
+    //     app: APP_SPEC,
+    //     sender: activeAccount.address,
+    //     resolveBy: "id",
+    //     id: 0,
+
+    //   },
+    //   algodClient
+    // )
+    // const isMainNet = await algokit.isLocalNet(algod);
+    // const app = await appClient.deploy({
+    //   allowDelete: isMainNet,
+    //   allowUpdate: isMainNet,
+    //   onSchemaBreak: !isMainNet ? "append" : "replace",
+    //   onUpdate: !isMainNet ? "append" : "update",
+    // });
+
     console.log(appId);
     console.log(appAddress);
     console.log(txId);
@@ -100,10 +122,36 @@ export default function Home() {
     setLoading(false);
   }
 
+  async function purchase_policy() {
+    let _seed = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      from: activeAccount?.address ? activeAccount.address : "",
+      suggestedParams: await algodClient.getTransactionParams().do(),
+      to: getApplicationAddress(appId),
+      amount: 1000000n
+    })
+
+    await appClient.bootstrap();
+
+    const result = await appClient.purchase_policy(
+      { pay_txn: _seed},
+      {
+        boxes: [{
+          appIndex: appId,
+          name: algosdk.decodeAddress(activeAccount.address).publicKey
+        }]
+      }
+    );
+    console.log(result);
+
+    // _getFundings()
+  }
   return (
     <main className="">
       <button className="m-10" onClick={() => createApp()}>
         createApp
+      </button>
+      <button className="m-10" onClick={() => purchase_policy()}>
+      purchase_policy
       </button>
       {/* NAVBAR */}
       <header className="w-full px-32 py-8 font-medium flex justify-between items-center">
