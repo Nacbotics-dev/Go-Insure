@@ -3,7 +3,7 @@
 This is a decentralized insurance application built on Algorand blockchain technology. It aims to provide an alternative and transparent approach to traditional insurance by leveraging the benefits of decentralization and smart contracts.
 
 ## Problems with Traditional Insurance
-
+ 
 Traditional insurance has several limitations and issues such as:
 
 1. Lack of Transparency: Traditional insurance processes often lack transparency, making it challenging for policyholders to understand how premiums are calculated, claims are evaluated, and decisions are made.
