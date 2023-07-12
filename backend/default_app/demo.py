@@ -238,7 +238,7 @@ def demo() -> None:
     )
     print(result.return_value)
 
-    import sys; sys.exit(0)
+    # import sys; sys.exit(0)
 
     # Make a request
     call_response = default_app_client.call(
@@ -249,8 +249,6 @@ def demo() -> None:
             suggested_params=suggested_params,
             boxes=[(default_app_id, encoding.decode_address(owner.address))],
         ),
-        time_of_event=1688861583,
-        location_of_event="Some random location",
         box_name=owner.address,
         key=key,
         token_asset_id=asset_id,

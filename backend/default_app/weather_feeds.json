@@ -1,8 +1,10 @@
 {
+  "weather_feed": {
     "area": "Ruiru",
     "state": "Kiambu",
     "country": "Kenya",
     "unit_of_measure": "metric",
     "date_time": "2023-07-13T08:00:00",
     "key": "##signKey"
+  }
 }
