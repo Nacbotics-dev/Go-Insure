@@ -1,0 +1,196 @@
+{
+    "name": "InsurancedApp",
+    "methods": [
+        {
+            "name": "opt_in",
+            "args": [],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "write_to_data_box",
+            "args": [
+                {
+                    "type": "byte[]",
+                    "name": "response_type_bytes"
+                },
+                {
+                    "type": "byte[]",
+                    "name": "response_body_bytes"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "bootstrap",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Bootstrap global state vlaues."
+        },
+        {
+            "name": "purchase_policy",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "pay_txn"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Buys a new property policy for an account.\nA new policy id is generated to identify the policy once purchased successfully."
+        },
+        {
+            "name": "approve_claim",
+            "args": [
+                {
+                    "type": "address",
+                    "name": "receiver_addr"
+                },
+                {
+                    "type": "uint64",
+                    "name": "coverage_amt"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Approve policy claim"
+        },
+        {
+            "name": "reject_claim",
+            "args": [
+                {
+                    "type": "address",
+                    "name": "receiver_addr"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Reject a policy claim"
+        },
+        {
+            "name": "review_claim",
+            "args": [
+                {
+                    "type": "byte[]",
+                    "name": "response_type_bytes"
+                },
+                {
+                    "type": "byte[]",
+                    "name": "response_body_bytes"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "send_request",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "time_of_event"
+                },
+                {
+                    "type": "string",
+                    "name": "location_of_event"
+                },
+                {
+                    "type": "byte[]",
+                    "name": "box_name"
+                },
+                {
+                    "type": "byte[]",
+                    "name": "key"
+                },
+                {
+                    "type": "uint64",
+                    "name": "token_asset_id"
+                },
+                {
+                    "type": "(uint32,byte[],uint64)[]",
+                    "name": "source_arr"
+                },
+                {
+                    "type": "uint32",
+                    "name": "agg_method"
+                },
+                {
+                    "type": "byte[]",
+                    "name": "user_data"
+                },
+                {
+                    "type": "application",
+                    "name": "main_app_reference"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        },
+        {
+            "name": "get_policy",
+            "args": [
+                {
+                    "type": "address",
+                    "name": "addr"
+                }
+            ],
+            "returns": {
+                "type": "(address,uint64,bool,uint64,uint64,string,uint64)"
+            },
+            "desc": "Gets policy for a specific address"
+        },
+        {
+            "name": "update_coverage_amount",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "amt"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Update policy coverage amount."
+        },
+        {
+            "name": "update_expiration_timeline",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "expiration_timeline"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Update policy expiration timeline."
+        },
+        {
+            "name": "opt_in_gora",
+            "args": [
+                {
+                    "type": "asset",
+                    "name": "asset_reference"
+                },
+                {
+                    "type": "application",
+                    "name": "main_app_reference"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            }
+        }
+    ],
+    "networks": {},
+    "desc": "Insurance dApp"
+}
