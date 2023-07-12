@@ -40,20 +40,15 @@ A decentralized insurance solution offers several benefits:
 
 ## Installation
 
-1. Clone the repository:
+1. Clone the repository: git clone `https://github.com/0xBitzz/Go-Insurance`
 
-git clone https://github.com/0xBitzz/Go-Insurance
-
-2. Install the necessary dependencies:
-
-npm install
+2. Install the necessary dependencies: 
+`yarn install`
 
 
 ## Usage
 
-1. Start the application:
-
-npm start
+1. Start the application: `yarn run dev`
 
 2. Access the application in your web browser at `http://localhost:3000`.
 
