@@ -1,6 +1,6 @@
 # Go-Insure
 
-This is a decentralized insurance application built on Algorand blockchain technology. It aims to provide an alternative and transparent approach to traditional insurance by leveraging the benefits of decentralization and smart contracts.
+This is a decentralized insurance application built on **[Algorand](https://developer.algorand.org/)** blockchain technology using the **[Goracle](https://www.goracle.io/)** protocol. It aims to provide an alternative and transparent approach to traditional insurance by leveraging the benefits of decentralization and smart contracts.
 
 ## Problems with Traditional Insurance
  
@@ -40,16 +40,14 @@ A decentralized insurance solution offers several benefits:
 
 ## Installation
 
-1. Clone the repository: git clone https://github.com/0xBitzz/Go-Insurance
+1. Clone this repository: `git clone https://github.com/0xBitzz/Go-Insurance`
 
-2. Install the necessary dependencies: npm install
+2. Install the necessary dependencies: `npm install`
 
 
 ## Usage
 
-1. Start the application:
-
-npm start
+1. Start the application: `npm start`
 
 2. Access the application in your web browser at `http://localhost:3000`.
 
