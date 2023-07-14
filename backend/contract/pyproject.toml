@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "Go-Insure"
+version = "0.1.0"
+description = "Algorand smart contracts"
+authors = ["0xBittz (https://github.com/0xBitzz), devEMEL (https://github.com/devEMEL)"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+beaker-pyteal = "^1.0.0"
+
+[tool.poetry.group.dev.dependencies]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

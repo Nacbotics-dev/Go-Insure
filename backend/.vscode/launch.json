@@ -1,34 +1,19 @@
-// Run and Debug configurations to allow for 'F5' build and deployment with breakpoint debugging - https://code.visualstudio.com/docs/editor/debugging#_launch-configurations
 {
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Demo current contract (+ LocalNet)",
+      "name": "Build & Deploy",
       "type": "python",
       "request": "launch",
-      "program": "default_app/demo.py",
-      "cwd": "${workspaceFolder}",
-      "env": {
-        "GORACLE_ABI_PATH":"${workspaceFolder}/protocol/assets/abi"
-      },
-      "console": "integratedTerminal",
-      "preLaunchTask": "Start"
+      "program": "deploy.py",
+      "cwd": "${workspaceFolder}"
     },
     {
-      "name": "Demo current contract",
+      "name": "Build",
       "type": "python",
       "request": "launch",
-      "program": "demo.py",
-      "cwd": "${fileDirname}",
-      "console": "integratedTerminal",
-    },
-    {
-      "name": "Build current contract",
-      "type": "python",
-      "request": "launch",
-      "program": "build.py",
-      "cwd": "${fileDirname}",
-      "console": "integratedTerminal",
+      "program": "app.py",
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

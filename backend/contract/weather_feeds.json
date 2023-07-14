@@ -1,0 +1,10 @@
+{
+  "weather": {
+    "area": "Ruiru",
+    "state": "Kiambu",
+    "country": "Kenya",
+    "date_time": "2023-07-13T08:00:00",
+    "unit_of_measure": "metric",
+    "key": "##signKey"
+  }
+}
