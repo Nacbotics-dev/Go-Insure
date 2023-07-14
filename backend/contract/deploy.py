@@ -1,7 +1,8 @@
+import build
+
 import json
 import os
 import shutil
-
 from algosdk import encoding
 from algosdk.atomic_transaction_composer import TransactionWithSigner
 from algosdk.transaction import PaymentTxn
@@ -14,9 +15,7 @@ from go_insure import go_insure_app, purchase_policy, get_policy
 BUILD_PATH = "./artifacts"
 if os.path.exists(BUILD_PATH):
     shutil.rmtree(BUILD_PATH)
-else:
-    import build
-    build.build()
+build.build()
 
 
 WEATHER_FEED_JSON_PATH = "./weather_feeds.json"

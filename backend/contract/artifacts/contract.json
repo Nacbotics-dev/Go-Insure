@@ -1,0 +1,95 @@
+{
+    "name": "go_insure",
+    "methods": [
+        {
+            "name": "bootstrap",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Bootstrap global state values."
+        },
+        {
+            "name": "purchase_policy",
+            "args": [
+                {
+                    "type": "pay",
+                    "name": "pay_txn"
+                },
+                {
+                    "type": "string",
+                    "name": "area"
+                },
+                {
+                    "type": "string",
+                    "name": "state"
+                },
+                {
+                    "type": "string",
+                    "name": "country"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Buys a new property policy for an account.\nA new policy id is generated to identify the policy once purchased successfully."
+        },
+        {
+            "name": "approve_claim",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Approve policy claim"
+        },
+        {
+            "name": "reject_claim",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Reject a policy claim"
+        },
+        {
+            "name": "get_policy",
+            "args": [
+                {
+                    "type": "address",
+                    "name": "addr"
+                }
+            ],
+            "returns": {
+                "type": "(address,uint64,bool,uint64,uint64,string,uint64,string,string,string)"
+            },
+            "desc": "Gets policy for a specific address"
+        },
+        {
+            "name": "update_coverage_amount",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "amt"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Update policy coverage amount."
+        },
+        {
+            "name": "update_expiration_timeline",
+            "args": [
+                {
+                    "type": "uint64",
+                    "name": "expiration_timeline"
+                }
+            ],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Update policy expiration timeline."
+        }
+    ],
+    "networks": {},
+    "desc": "Insurance dApp"
+}
