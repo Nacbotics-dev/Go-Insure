@@ -67,18 +67,18 @@ go_insure_app = Application(
 )
 
 
-# @go_insure_app.create
-# def create() -> Expr:
-#     return Seq(
-#         go_insure_app.state.insurer.set(Global.current_application_address()),
-#     )
-
-
 @go_insure_app.create
-def bootstrap() -> Expr:
-    """Bootstrap global state values."""
+def create() -> Expr:
+    """Initialize global state values."""
     return Seq(
         go_insure_app.initialize_global_state(),
+    )
+
+
+@go_insure_app.external
+def bootstrap() -> Expr:
+    """Set insurer address to the current app address."""
+    return Seq(
         go_insure_app.state.insurer.set(Global.current_application_address()),
     )
 

@@ -2,12 +2,20 @@
     "name": "go_insure",
     "methods": [
         {
+            "name": "create",
+            "args": [],
+            "returns": {
+                "type": "void"
+            },
+            "desc": "Initialize global state values."
+        },
+        {
             "name": "bootstrap",
             "args": [],
             "returns": {
                 "type": "void"
             },
-            "desc": "Bootstrap global state values."
+            "desc": "Set insurer address to the current app address."
         },
         {
             "name": "purchase_policy",
@@ -32,7 +40,7 @@
             "returns": {
                 "type": "void"
             },
-            "desc": "Buys a new property policy for an account.\nA new policy id is generated to identify the policy once purchased successfully."
+            "desc": "Buys a new property policy for an account."
         },
         {
             "name": "approve_claim",

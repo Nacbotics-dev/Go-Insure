@@ -9,7 +9,7 @@ from algosdk.transaction import PaymentTxn
 from beaker import client, consts, localnet
 from beaker.client.api_providers import AlgoNode, Network
 
-from go_insure import go_insure_app, purchase_policy, get_policy
+from go_insure import go_insure_app, bootstrap, purchase_policy, get_policy
 
 
 BUILD_PATH = "./artifacts"
@@ -40,9 +40,9 @@ def form_weather_json(area: str, state: str, country: str, date_time: str) -> No
         output_file.write(json_obj)
 
 
-form_weather_json(
-    area="Ruiru", state="Kiambu", country="Kenya", date_time="2023-07-13T08:00:00"
-)
+# form_weather_json(
+#     area="Ruiru", state="Kiambu", country="Kenya", date_time="2023-07-13T08:00:00"
+# )
 
 
 def demo() -> None:
@@ -66,6 +66,8 @@ def demo() -> None:
     print(f"Contract deployed with app id: {app_id}, and address: {app_addr}")
 
     app_client.fund(10_000_000)
+
+    app_client.call(bootstrap)
 
     print(f"Deployer global state {app_client.get_global_state()}")
 
@@ -94,7 +96,6 @@ def demo() -> None:
     )
     print(result.return_value)
 
-
     # Account 2 - Line 104 fails because of insufficient premium amount
     txn = PaymentTxn(
         sender=acct2.address,
@@ -116,7 +117,7 @@ def demo() -> None:
         addr=acct2.address,
         boxes=[(app_id, encoding.decode_address(acct2.address))],
     )
-    print(result.return_value) 
+    print(result.return_value)
 
 
 if __name__ == "__main__":

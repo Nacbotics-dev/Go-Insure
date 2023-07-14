@@ -2,46 +2,38 @@
 intcblock 0 1 65536 1000000 5000000 320
 bytecblock 0x 0x696e7375726572 0x706f6c6963795f65787069726174696f6e5f64617465 0x00 0x636f7665726167655f616d6f756e74 0x50656e64696e67
 txna ApplicationArgs 0
+pushbytes 0x4c5c61ba // "create()void"
+==
+bnz main_l16
+txna ApplicationArgs 0
 pushbytes 0xbec76d87 // "bootstrap()void"
 ==
-bnz main_l14
+bnz main_l15
 txna ApplicationArgs 0
 pushbytes 0x241f07aa // "purchase_policy(pay,string,string,string)void"
 ==
-bnz main_l13
+bnz main_l14
 txna ApplicationArgs 0
 pushbytes 0x6c6bc7b4 // "approve_claim()void"
 ==
-bnz main_l12
+bnz main_l13
 txna ApplicationArgs 0
 pushbytes 0x9d750425 // "reject_claim()void"
 ==
-bnz main_l11
+bnz main_l12
 txna ApplicationArgs 0
 pushbytes 0x46566d83 // "get_policy(address)(address,uint64,bool,uint64,uint64,string,uint64,string,string,string)"
 ==
-bnz main_l10
+bnz main_l11
 txna ApplicationArgs 0
 pushbytes 0x69bdcd84 // "update_coverage_amount(uint64)void"
 ==
-bnz main_l9
+bnz main_l10
 txna ApplicationArgs 0
 pushbytes 0xaed5d0d6 // "update_expiration_timeline(uint64)void"
 ==
-bnz main_l8
+bnz main_l9
 err
-main_l8:
-txn OnCompletion
-intc_0 // NoOp
-==
-txn ApplicationID
-intc_0 // 0
-!=
-&&
-assert
-callsub updateexpirationtimelinecaster_13
-intc_1 // 1
-return
 main_l9:
 txn OnCompletion
 intc_0 // NoOp
@@ -51,7 +43,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub updatecoverageamountcaster_12
+callsub updateexpirationtimelinecaster_15
 intc_1 // 1
 return
 main_l10:
@@ -63,7 +55,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub getpolicycaster_11
+callsub updatecoverageamountcaster_14
 intc_1 // 1
 return
 main_l11:
@@ -75,7 +67,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub rejectclaimcaster_10
+callsub getpolicycaster_13
 intc_1 // 1
 return
 main_l12:
@@ -87,7 +79,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub approveclaimcaster_9
+callsub rejectclaimcaster_12
 intc_1 // 1
 return
 main_l13:
@@ -99,7 +91,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub purchasepolicycaster_8
+callsub approveclaimcaster_11
 intc_1 // 1
 return
 main_l14:
@@ -108,15 +100,39 @@ intc_0 // NoOp
 ==
 txn ApplicationID
 intc_0 // 0
+!=
+&&
+assert
+callsub purchasepolicycaster_10
+intc_1 // 1
+return
+main_l15:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
+!=
+&&
+assert
+callsub bootstrapcaster_9
+intc_1 // 1
+return
+main_l16:
+txn OnCompletion
+intc_0 // NoOp
+==
+txn ApplicationID
+intc_0 // 0
 ==
 &&
 assert
-callsub bootstrapcaster_7
+callsub createcaster_8
 intc_1 // 1
 return
 
-// bootstrap
-bootstrap_0:
+// create
+create_0:
 proto 0 0
 bytec 4 // "coverage_amount"
 intc 4 // 5000000
@@ -127,13 +143,18 @@ app_global_put
 bytec_2 // "policy_expiration_date"
 pushint 31536000 // 31536000
 app_global_put
+retsub
+
+// bootstrap
+bootstrap_1:
+proto 0 0
 bytec_1 // "insurer"
 global CurrentApplicationAddress
 app_global_put
 retsub
 
 // purchase_policy
-purchasepolicy_1:
+purchasepolicy_2:
 proto 4 0
 bytec_0 // ""
 intc_0 // 0
@@ -333,7 +354,7 @@ box_put
 retsub
 
 // approve_claim
-approveclaim_2:
+approveclaim_3:
 proto 0 0
 bytec_0 // ""
 dup
@@ -546,7 +567,7 @@ box_put
 retsub
 
 // reject_claim
-rejectclaim_3:
+rejectclaim_4:
 proto 0 0
 bytec_0 // ""
 dup
@@ -733,7 +754,7 @@ box_put
 retsub
 
 // get_policy
-getpolicy_4:
+getpolicy_5:
 proto 1 1
 bytec_0 // ""
 frame_dig -1
@@ -747,7 +768,7 @@ frame_bury 0
 retsub
 
 // update_coverage_amount
-updatecoverageamount_5:
+updatecoverageamount_6:
 proto 1 0
 txn Sender
 global CreatorAddress
@@ -760,7 +781,7 @@ app_global_put
 retsub
 
 // update_expiration_timeline
-updateexpirationtimeline_6:
+updateexpirationtimeline_7:
 proto 1 0
 txn Sender
 global CreatorAddress
@@ -772,14 +793,20 @@ frame_dig -1
 app_global_put
 retsub
 
-// bootstrap_caster
-bootstrapcaster_7:
+// create_caster
+createcaster_8:
 proto 0 0
-callsub bootstrap_0
+callsub create_0
+retsub
+
+// bootstrap_caster
+bootstrapcaster_9:
+proto 0 0
+callsub bootstrap_1
 retsub
 
 // purchase_policy_caster
-purchasepolicycaster_8:
+purchasepolicycaster_10:
 proto 0 0
 intc_0 // 0
 bytec_0 // ""
@@ -803,30 +830,30 @@ frame_dig 0
 frame_dig 1
 frame_dig 2
 frame_dig 3
-callsub purchasepolicy_1
+callsub purchasepolicy_2
 retsub
 
 // approve_claim_caster
-approveclaimcaster_9:
+approveclaimcaster_11:
 proto 0 0
-callsub approveclaim_2
+callsub approveclaim_3
 retsub
 
 // reject_claim_caster
-rejectclaimcaster_10:
+rejectclaimcaster_12:
 proto 0 0
-callsub rejectclaim_3
+callsub rejectclaim_4
 retsub
 
 // get_policy_caster
-getpolicycaster_11:
+getpolicycaster_13:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub getpolicy_4
+callsub getpolicy_5
 frame_bury 0
 pushbytes 0x151f7c75 // 0x151f7c75
 frame_dig 0
@@ -835,23 +862,23 @@ log
 retsub
 
 // update_coverage_amount_caster
-updatecoverageamountcaster_12:
+updatecoverageamountcaster_14:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
 btoi
 frame_bury 0
 frame_dig 0
-callsub updatecoverageamount_5
+callsub updatecoverageamount_6
 retsub
 
 // update_expiration_timeline_caster
-updateexpirationtimelinecaster_13:
+updateexpirationtimelinecaster_15:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
 btoi
 frame_bury 0
 frame_dig 0
-callsub updateexpirationtimeline_6
+callsub updateexpirationtimeline_7
 retsub
