@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "rebuild": "npx beaker generate contracts/artifacts/application.json app_client/"
+    "rebuild": "npx beaker generate ../backend/contract/artifacts/application.json app_client/"
   },
   "dependencies": {
     "@algorandfoundation/algokit-utils": "2.0.0",

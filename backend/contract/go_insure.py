@@ -74,11 +74,7 @@ def create() -> Expr:
     )
 
 
-# @go_insure_app.external
-# def bootstrap() -> Expr:
-#     return Seq(
-#         go_insure_app.state.insurer.set(Global.current_application_address()),
-#     )
+
 
 
 @go_insure_app.external
