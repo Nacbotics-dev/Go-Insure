@@ -2,7 +2,7 @@
 intcblock 0 1 65536 1000000 5000000 320
 bytecblock 0x 0x696e7375726572 0x706f6c6963795f65787069726174696f6e5f64617465 0x00 0x636f7665726167655f616d6f756e74 0x50656e64696e67
 txna ApplicationArgs 0
-pushbytes 0xbec76d87 // "bootstrap()void"
+pushbytes 0x4c5c61ba // "create()void"
 ==
 bnz main_l14
 txna ApplicationArgs 0
@@ -111,12 +111,12 @@ intc_0 // 0
 ==
 &&
 assert
-callsub bootstrapcaster_7
+callsub createcaster_7
 intc_1 // 1
 return
 
-// bootstrap
-bootstrap_0:
+// create
+create_0:
 proto 0 0
 bytec 4 // "coverage_amount"
 intc 4 // 5000000
@@ -772,10 +772,10 @@ frame_dig -1
 app_global_put
 retsub
 
-// bootstrap_caster
-bootstrapcaster_7:
+// create_caster
+createcaster_7:
 proto 0 0
-callsub bootstrap_0
+callsub create_0
 retsub
 
 // purchase_policy_caster

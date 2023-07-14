@@ -2,7 +2,7 @@
     "name": "go_insure",
     "methods": [
         {
-            "name": "bootstrap",
+            "name": "create",
             "args": [],
             "returns": {
                 "type": "void"
