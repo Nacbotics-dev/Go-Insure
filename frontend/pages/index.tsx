@@ -53,7 +53,8 @@ export default function Home() {
   const [area, setArea] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
-  const [dateTime, setDateTime] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
 
   useEffect(() => {
     console.log(activeAccount, appId, algodClient);
@@ -141,8 +142,12 @@ export default function Home() {
       };
       console.log(policy);
       console.log(val[0]);
-      if (val[0] == activeAccount.address) {
-        _policy.push(policy);
+      if (activeAccount?.address) {
+        if (val[0] == activeAccount.address) {
+          console.log("hello");
+
+          _policy.push(policy);
+        }
       }
     }
     console.log(_policy);
@@ -310,67 +315,86 @@ export default function Home() {
       )}
       {/* section goes here */}
 
-      {/* PURCHASE POLICY */}
-      <div className="flex justify-center p-20">
-        <button
-          className="bg-black text-white py-3 px-10 text-2xl"
-          onClick={() => purchase_policy()}
-        >
-          Purchase Policy
-        </button>
-      </div>
+      <div className="flex justify-center align-center p-20">
+        {/* PURCHASE POLICY */}
+        <div className="flex justify-center p-20"></div>
 
-      {/* CLAIM POLICY */}
-      <div className="flex justify-center items-center">
-        <div className="flex flex-col">
+        <div className="flex justify-center items-center">
           <div className="flex flex-col">
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Area"
-                className="py-3 px-10 border-2 rounded-lg"
-                onChange={(e) => {
-                  setArea(e.target.value);
-                }}
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="State"
-                className="py-3 px-10 border-2 rounded-lg"
-                onChange={(e) => {
-                  setState(e.target.value);
-                }}
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Country"
-                className="py-3 px-10 border-2 rounded-lg"
-                onChange={(e) => {
-                  setCountry(e.target.value);
-                }}
-              />
-            </div>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="DateTime"
-                className="py-3 px-10 border-2 rounded-lg"
-                onChange={(e) => {
-                  setDateTime(e.target.value);
-                }}
-              />
+            <div className="flex flex-col">
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Area"
+                  className="py-3 px-10 border-2 rounded-lg"
+                  onChange={(e) => {
+                    setArea(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="State"
+                  className="py-3 px-10 border-2 rounded-lg"
+                  onChange={(e) => {
+                    setState(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Country"
+                  className="py-3 px-10 border-2 rounded-lg"
+                  onChange={(e) => {
+                    setCountry(e.target.value);
+                  }}
+                />
+              </div>
+
+              <button
+                className="bg-black text-white py-3 px-10 text-2xl"
+                onClick={() => purchase_policy()}
+              >
+                Purchase Policy
+              </button>
             </div>
           </div>
-          <button
-            className="border-2 mt-4 p-4 text-2xl"
-            onClick={() => claim_policy(area, state, country, dateTime)}
-          >
-            Claim Policy
-          </button>
+        </div>
+
+        {/* CLAIM POLICY */}
+        <div className="flex justify-center items-center p-20">
+          <div className="flex flex-col">
+            <div className="flex flex-col">
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Date"
+                  className="py-3 px-10 border-2 rounded-lg"
+                  onChange={(e) => {
+                    setDate(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Time"
+                  className="py-3 px-10 border-2 rounded-lg"
+                  onChange={(e) => {
+                    setTime(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+            <button
+              className="border-2 mt-4 p-4 text-2xl"
+              onClick={() => claim_policy(area, state, country, dateTime)}
+            >
+              Claim Policy
+            </button>
+          </div>
         </div>
       </div>
 
