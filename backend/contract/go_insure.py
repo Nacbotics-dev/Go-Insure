@@ -42,7 +42,9 @@ class Policy(abi.NamedTuple):
 
 class PolicyState:
     insurer = GlobalStateValue(
-        stack_type=TealType.bytes, default=Bytes(""), descr="The insurer address"
+        stack_type=TealType.bytes,
+        default=Bytes(""),
+        descr="The insurer address",
     )
     coverage_amount = GlobalStateValue(
         stack_type=TealType.uint64,
@@ -79,6 +81,7 @@ def bootstrap() -> Expr:
         go_insure_app.initialize_global_state(),
         go_insure_app.state.insurer.set(Global.current_application_address()),
     )
+
 
 @go_insure_app.external
 def purchase_policy(
