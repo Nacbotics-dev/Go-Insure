@@ -1,8 +1,8 @@
 #pragma version 8
-intcblock 0 1 65536 1000000 5000000 320
-bytecblock 0x 0x696e7375726572 0x706f6c6963795f65787069726174696f6e5f64617465 0x00 0x636f7665726167655f616d6f756e74 0x50656e64696e67
-txna ApplicationArgs 0
-pushbytes 0x4c5c61ba // "create()void"
+intcblock 0 1 65536 1000000 320 5000000
+bytecblock 0x 0x00 0x696e7375726572 0x706f6c6963795f65787069726174696f6e5f64617465 0x50656e64696e67
+txn NumAppArgs
+intc_0 // 0
 ==
 bnz main_l16
 txna ApplicationArgs 0
@@ -43,7 +43,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub updateexpirationtimelinecaster_15
+callsub updateexpirationtimelinecaster_13
 intc_1 // 1
 return
 main_l10:
@@ -55,7 +55,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub updatecoverageamountcaster_14
+callsub updatecoverageamountcaster_12
 intc_1 // 1
 return
 main_l11:
@@ -67,7 +67,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub getpolicycaster_13
+callsub getpolicycaster_11
 intc_1 // 1
 return
 main_l12:
@@ -79,7 +79,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub rejectclaimcaster_12
+callsub rejectclaimcaster_10
 intc_1 // 1
 return
 main_l13:
@@ -91,7 +91,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub approveclaimcaster_11
+callsub approveclaimcaster_9
 intc_1 // 1
 return
 main_l14:
@@ -103,7 +103,7 @@ intc_0 // 0
 !=
 &&
 assert
-callsub purchasepolicycaster_10
+callsub purchasepolicycaster_8
 intc_1 // 1
 return
 main_l15:
@@ -115,46 +115,33 @@ intc_0 // 0
 !=
 &&
 assert
-callsub bootstrapcaster_9
+callsub bootstrapcaster_7
 intc_1 // 1
 return
 main_l16:
 txn OnCompletion
 intc_0 // NoOp
 ==
+bnz main_l18
+err
+main_l18:
 txn ApplicationID
 intc_0 // 0
 ==
-&&
 assert
-callsub createcaster_8
 intc_1 // 1
 return
 
-// create
-create_0:
-proto 0 0
-bytec 4 // "coverage_amount"
-intc 4 // 5000000
-app_global_put
-bytec_1 // "insurer"
-bytec_0 // ""
-app_global_put
-bytec_2 // "policy_expiration_date"
-pushint 31536000 // 31536000
-app_global_put
-retsub
-
 // bootstrap
-bootstrap_1:
+bootstrap_0:
 proto 0 0
-bytec_1 // "insurer"
+bytec_2 // "insurer"
 global CurrentApplicationAddress
 app_global_put
 retsub
 
 // purchase_policy
-purchasepolicy_2:
+purchasepolicy_1:
 proto 4 0
 bytec_0 // ""
 intc_0 // 0
@@ -215,7 +202,7 @@ intc_3 // 1000000
 assert
 frame_dig -4
 gtxns Receiver
-bytec_1 // "insurer"
+bytec_2 // "insurer"
 app_global_get
 ==
 // Invalid txn type, amount or receiver.
@@ -236,11 +223,11 @@ frame_bury 2
 global LatestTimestamp
 frame_bury 3
 frame_dig 3
-bytec_2 // "policy_expiration_date"
+bytec_3 // "policy_expiration_date"
 app_global_get
 +
 frame_bury 4
-bytec 5 // "Pending"
+bytec 4 // "Pending"
 frame_bury 5
 frame_dig 5
 len
@@ -255,7 +242,7 @@ frame_dig 0
 frame_dig 1
 itob
 concat
-bytec_3 // 0x00
+bytec_1 // 0x00
 intc_0 // 0
 frame_dig 2
 setbit
@@ -354,7 +341,7 @@ box_put
 retsub
 
 // approve_claim
-approveclaim_3:
+approveclaim_2:
 proto 0 0
 bytec_0 // ""
 dup
@@ -382,7 +369,7 @@ pushint 32 // 32
 extract_uint64
 frame_bury 2
 frame_dig 0
-intc 5 // 320
+intc 4 // 320
 getbit
 frame_bury 3
 frame_dig 0
@@ -442,7 +429,7 @@ intc_1 // 1
 assert
 frame_dig 6
 extract 2 0
-bytec 5 // "Pending"
+bytec 4 // "Pending"
 ==
 assert
 itxn_begin
@@ -450,7 +437,7 @@ intc_1 // pay
 itxn_field TypeEnum
 frame_dig 1
 itxn_field Receiver
-intc 4 // 5000000
+intc 5 // 5000000
 itxn_field Amount
 itxn_submit
 pushbytes 0x417070726f766564 // "Approved"
@@ -462,13 +449,13 @@ extract 6 0
 frame_dig 10
 concat
 frame_bury 10
-intc 4 // 5000000
+intc 5 // 5000000
 frame_bury 11
 frame_dig 1
 frame_dig 2
 itob
 concat
-bytec_3 // 0x00
+bytec_1 // 0x00
 intc_0 // 0
 frame_dig 3
 setbit
@@ -567,7 +554,7 @@ box_put
 retsub
 
 // reject_claim
-rejectclaim_4:
+rejectclaim_3:
 proto 0 0
 bytec_0 // ""
 dup
@@ -601,7 +588,7 @@ pushint 32 // 32
 extract_uint64
 frame_bury 2
 frame_dig 0
-intc 5 // 320
+intc 4 // 320
 getbit
 frame_bury 3
 frame_dig 0
@@ -655,7 +642,7 @@ frame_dig 1
 frame_dig 2
 itob
 concat
-bytec_3 // 0x00
+bytec_1 // 0x00
 intc_0 // 0
 frame_dig 3
 setbit
@@ -754,7 +741,7 @@ box_put
 retsub
 
 // get_policy
-getpolicy_5:
+getpolicy_4:
 proto 1 1
 bytec_0 // ""
 frame_dig -1
@@ -768,45 +755,39 @@ frame_bury 0
 retsub
 
 // update_coverage_amount
-updatecoverageamount_6:
+updatecoverageamount_5:
 proto 1 0
 txn Sender
 global CreatorAddress
 ==
 // unauthorized
 assert
-bytec 4 // "coverage_amount"
+pushbytes 0x636f7665726167655f616d6f756e74 // "coverage_amount"
 frame_dig -1
 app_global_put
 retsub
 
 // update_expiration_timeline
-updateexpirationtimeline_7:
+updateexpirationtimeline_6:
 proto 1 0
 txn Sender
 global CreatorAddress
 ==
 // unauthorized
 assert
-bytec_2 // "policy_expiration_date"
+bytec_3 // "policy_expiration_date"
 frame_dig -1
 app_global_put
 retsub
 
-// create_caster
-createcaster_8:
-proto 0 0
-callsub create_0
-retsub
-
 // bootstrap_caster
-bootstrapcaster_9:
+bootstrapcaster_7:
 proto 0 0
-callsub bootstrap_1
+callsub bootstrap_0
 retsub
 
 // purchase_policy_caster
-purchasepolicycaster_10:
+purchasepolicycaster_8:
 proto 0 0
 intc_0 // 0
 bytec_0 // ""
@@ -830,30 +811,30 @@ frame_dig 0
 frame_dig 1
 frame_dig 2
 frame_dig 3
-callsub purchasepolicy_2
+callsub purchasepolicy_1
 retsub
 
 // approve_claim_caster
-approveclaimcaster_11:
+approveclaimcaster_9:
 proto 0 0
-callsub approveclaim_3
+callsub approveclaim_2
 retsub
 
 // reject_claim_caster
-rejectclaimcaster_12:
+rejectclaimcaster_10:
 proto 0 0
-callsub rejectclaim_4
+callsub rejectclaim_3
 retsub
 
 // get_policy_caster
-getpolicycaster_13:
+getpolicycaster_11:
 proto 0 0
 bytec_0 // ""
 dup
 txna ApplicationArgs 1
 frame_bury 1
 frame_dig 1
-callsub getpolicy_5
+callsub getpolicy_4
 frame_bury 0
 pushbytes 0x151f7c75 // 0x151f7c75
 frame_dig 0
@@ -862,23 +843,23 @@ log
 retsub
 
 // update_coverage_amount_caster
-updatecoverageamountcaster_14:
+updatecoverageamountcaster_12:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
 btoi
 frame_bury 0
 frame_dig 0
-callsub updatecoverageamount_6
+callsub updatecoverageamount_5
 retsub
 
 // update_expiration_timeline_caster
-updateexpirationtimelinecaster_15:
+updateexpirationtimelinecaster_13:
 proto 0 0
 intc_0 // 0
 txna ApplicationArgs 1
 btoi
 frame_bury 0
 frame_dig 0
-callsub updateexpirationtimeline_7
+callsub updateexpirationtimeline_6
 retsub

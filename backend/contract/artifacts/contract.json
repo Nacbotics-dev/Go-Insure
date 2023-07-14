@@ -2,14 +2,6 @@
     "name": "go_insure",
     "methods": [
         {
-            "name": "create",
-            "args": [],
-            "returns": {
-                "type": "void"
-            },
-            "desc": "Initialize global state values."
-        },
-        {
             "name": "bootstrap",
             "args": [],
             "returns": {
