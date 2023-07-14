@@ -1,6 +1,5 @@
 // @ts-nocheck
 import Image from "next/image";
-import { Inter } from "next/font/google";
 import algosdk, { getApplicationAddress, microalgosToAlgos } from "algosdk";
 import { useState, useEffect } from "react";
 import { clients } from "beaker-ts";
@@ -9,8 +8,6 @@ import { useWallet } from "@txnlab/use-wallet";
 import { shortenAddress } from "../helpers/shortenAddress";
 // import app client
 import { InsurancedApp } from "../app_client/insurancedapp_client";
-import { stringify } from "querystring";
-import { Policy } from "@/goInsure";
 import { makeCall } from "../request";
 
 // If you just need a placeholder signer
@@ -71,6 +68,8 @@ export default function Home() {
         })
       );
     }
+
+    
 
     _getMyPolicy();
   }, [activeAccount]);
@@ -148,6 +147,7 @@ export default function Home() {
 
           _policy.push(policy);
         }
+
       }
     }
     console.log(_policy);
