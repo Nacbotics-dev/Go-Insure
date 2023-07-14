@@ -31,7 +31,7 @@ const AnonClient = (client: algosdk.Algodv2, appId: number): go_insure => {
 };
 
 export default function Home() {
-  const [appId, setAppId] = useState<number>(0);
+  const [appId, setAppId] = useState<number>(257585879);
   // Setup config for client/network.
   const [apiProvider, setApiProvider] = useState(clients.APIProvider.AlgoNode);
   const [network, setNetwork] = useState(clients.Network.TestNet);
@@ -67,8 +67,7 @@ export default function Home() {
           appId: appId,
         })
       );
-      console.log('hello');
-      
+      console.log("hello");
     }
 
     _getMyPolicy();
@@ -86,6 +85,7 @@ export default function Home() {
     providers?.map((provider) => {
       provider.disconnect();
     });
+    setMyPolicy([]);
   };
 
   const handleConnect = () => {
@@ -104,6 +104,7 @@ export default function Home() {
     setLoading(true);
     console.log(appClient);
     const { appId, appAddress, txId } = await appClient.create();
+    await appClient.bootstrap();
 
     console.log(appId);
     console.log(appAddress);
@@ -126,7 +127,7 @@ export default function Home() {
       console.log(result);
 
       const resultCodec = algosdk.ABIType.from(
-        "(address,uint64,bool,uint64,uint64,string,uint64)"
+        "(address,uint64,bool,uint64,uint64,string,uint64,string,string,string)"
       );
       const val = resultCodec.decode(result);
       console.log(val);
@@ -137,6 +138,9 @@ export default function Home() {
         expirationDate: Number(val[4]),
         claimedStatus: val[5],
         amountClaimed: Number(val[6]),
+        area: val[7],
+        state: val[8],
+        country: val[9],
       };
       console.log(policy);
       console.log(val[0]);
@@ -146,98 +150,99 @@ export default function Home() {
 
           _policy.push(policy);
         }
-
       }
     }
     console.log(_policy);
     return _policy;
-    // console.log(policy)
-    // return policy;
-    // const rawAddress = new Uint8Array(activeAccount.address)
-    // console.log(rawAddress)
-    // if(!activeAccount.address) { console.log("connect pls");return}
-    // const _address = activeAccount.address;
-    // console.log(activeAccount.address)
-    // const res = await appClient.get_policy({addr: String(activeAccount.address),
-    //     boxes: [
-    //       {
-    //         appIndex: appId,
-    //         name: algosdk.decodeAddress(activeAccount.address).publicKey,
-    //       },
-    //     ],
-    // });
-    // console.log(res);
   }
 
-  async function claim_policy(area, state, country, dateTime) {
-    if (area && state && country && dateTime) {
-      const result = await makeCall(area, state, country, dateTime);
+  async function claim_policy(_date, _time) {
+    if (_date && _time) {
+      const _dateTime = _date.concat("T", _time);
+      const result = await makeCall(area, state, country, _dateTime);
       console.log(result);
 
       if (result?.windSpeed >= 75 && result?.windGust >= 100) {
-        const result = await appClient.approve_claim(
-          {
-            receiver_addr: String(activeAccount.address),
-            coverage_amt: BigInt(5000000n),
-          },
-          {
-            boxes: [
-              {
-                appIndex: appId,
-                name: algosdk.decodeAddress(activeAccount.address).publicKey,
-              },
-            ],
-          }
-        );
+        const result = await appClient.approve_claim({
+          boxes: [
+            {
+              appIndex: appId,
+              name: algosdk.decodeAddress(activeAccount.address).publicKey,
+            },
+          ],
+        });
         console.log(result);
+        setDate("");
+        setTime("");
       } else {
-        const result = await appClient.approve_claim(
-          { receiver_addr: String(activeAccount.address) },
-          {
-            boxes: [
-              {
-                appIndex: appId,
-                name: algosdk.decodeAddress(activeAccount.address).publicKey,
-              },
-            ],
-          }
-        );
+        const result = await appClient.reject_claim({
+          boxes: [
+            {
+              appIndex: appId,
+              name: algosdk.decodeAddress(activeAccount.address).publicKey,
+            },
+          ],
+        });
         console.log(result);
+        setDate("");
+        setTime("");
       }
     }
 
     _getMyPolicy();
   }
 
-  async function purchase_policy() {
-    let _seed = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      from: activeAccount?.address ? activeAccount.address : "",
-      suggestedParams: await algodClient.getTransactionParams().do(),
-      to: getApplicationAddress(appId),
-      amount: 1000000n,
-    });
+  async function purchase_policy(area, state, country) {
+    if (area && state && country) {
+      let _seed = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+        from: activeAccount?.address ? activeAccount.address : "",
+        suggestedParams: await algodClient.getTransactionParams().do(),
+        to: getApplicationAddress(appId),
+        amount: 1000000n,
+      });
 
-    const result = await appClient.purchase_policy(
-      { pay_txn: _seed },
-      {
-        boxes: [
-          {
-            appIndex: appId,
-            name: algosdk.decodeAddress(activeAccount.address).publicKey,
-          },
-        ],
-      }
-    );
-    console.log(result);
+      const result = await appClient.purchase_policy(
+        { pay_txn: _seed, area: area, state: state, country: country },
+        {
+          boxes: [
+            {
+              appIndex: appId,
+              name: algosdk.decodeAddress(activeAccount.address).publicKey,
+            },
+          ],
+        }
+      );
+      console.log(result);
+      setArea("");
+      setState("");
+      setCountry("");
+    }
 
     _getMyPolicy();
   }
 
+  const convertToDateTime = (timestamp) => {
+    let dateFormat = new Date(timestamp * 1000);
+    return "".concat(
+      dateFormat.getDate(),
+      "/",
+      dateFormat.getMonth() + 1,
+      "/",
+      dateFormat.getFullYear(),
+      " ",
+      dateFormat.getHours(),
+      ":",
+      dateFormat.getMinutes(),
+      ":",
+      dateFormat.getSeconds()
+    );
+  };
   return (
     <main className="">
-      <button className="m-10" onClick={() => createApp()}>
+      {/* <button className="m-10" onClick={() => createApp()}>
         createApp
-      </button>
+      </button> */}
+
       {/* NAVBAR */}
       <header className="w-full px-32 py-8 font-medium flex justify-between items-center">
         <h2 className="font-bold text-2xl">GO-INSURE</h2>
@@ -316,8 +321,6 @@ export default function Home() {
 
       <div className="flex justify-center align-center p-20">
         {/* PURCHASE POLICY */}
-        <div className="flex justify-center p-20"></div>
-
         <div className="flex justify-center items-center">
           <div className="flex flex-col">
             <div className="flex flex-col">
@@ -354,7 +357,7 @@ export default function Home() {
 
               <button
                 className="bg-black text-white py-3 px-10 text-2xl"
-                onClick={() => purchase_policy()}
+                onClick={() => purchase_policy(area, state, country)}
               >
                 Purchase Policy
               </button>
@@ -389,7 +392,7 @@ export default function Home() {
             </div>
             <button
               className="border-2 mt-4 p-4 text-2xl"
-              onClick={() => claim_policy(area, state, country, dateTime)}
+              onClick={() => claim_policy(date, time)}
             >
               Claim Policy
             </button>
@@ -402,31 +405,66 @@ export default function Home() {
         <h2 className="text-bold text-2xl underline mt-10 p-2">MY INSURANCE</h2>
       </div>
       {/* INSURANCE TABLE */}
-      <div className="flex justify-between align-center mt-10 px-40 border-b-2">
-        <h3 className="text-xl text-bold">Premium Amount</h3>
-        <h3 className="text-xl text-bold">Active Status</h3>
-        <h3 className="text-xl text-bold">Registration Date</h3>
-        <h3 className="text-xl text-bold">Expiration Date</h3>
-        <h3 className="text-xl text-bold">Claim Status</h3>
-        <h3 className="text-xl text-bold">Amount Claimed</h3>
+
+      <div className="flex justify-center align-center mt-10">
+        <table class="shadow-lg bg-white text-2x">
+          <thead>
+            <tr>
+              <th className="bg-blue-100 border text-left px-8 py-4">
+                Premium Amount
+              </th>
+              <th className="bg-blue-100 border text-left px-8 py-4">
+                Active Status
+              </th>
+              <th className="bg-blue-100 border text-left px-8 py-4">
+                Registration Date
+              </th>
+              <th className="bg-blue-100 border text-left px-8 py-4">
+                Expiration Date
+              </th>
+              <th className="bg-blue-100 border text-left px-8 py-4">
+                Claim Status
+              </th>
+              <th className="bg-blue-100 border text-left px-8 py-4">
+                Amount Claimed
+              </th>
+              <th className="bg-blue-100 border text-left px-8 py-4">Area</th>
+              <th className="bg-blue-100 border text-left px-8 py-4">State</th>
+              <th className="bg-blue-100 border text-left px-8 py-4">
+                Country
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {myPolicy &&
+              myPolicy.map((policy) => (
+                <tr className="border px-8 py-4">
+                  <td className="border text-center px-8 py-4">
+                    {microalgosToAlgos(policy.premAmount)}
+                  </td>
+                  <td className="border text-center px-8 py-4">
+                    {policy.activeStatus ? "True" : "False"}
+                  </td>
+                  <td className="border text-center px-8 py-4">
+                    {convertToDateTime(policy.registrationDate)}
+                  </td>
+                  <td className="border text-center px-8 py-4">
+                    {convertToDateTime(policy.expirationDate)}
+                  </td>
+                  <td className="border text-center px-8 py-4">{policy.claimedStatus}</td>
+                  <td className="border text-center px-8 py-4">
+                    {microalgosToAlgos(policy.amountClaimed)}
+                  </td>
+                  <td className="border text-center px-8 py-4">{policy.area}</td>
+                  <td className="border text-center px-8 py-4">{policy.state}</td>
+                  <td className="border text-center px-8 py-4">{policy.country}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
-      {myPolicy &&
-        myPolicy.map((policy) => (
-          <div className="flex justify-between align-center mt-6 mb-20 px-40 border-b-2">
-            <h3 className="text-xl text-bold">
-              {microalgosToAlgos(policy.premAmount)}
-            </h3>
-            <h3 className="text-xl text-bold">
-              {policy.activeStatus ? "True" : "False"}
-            </h3>
-            <h3 className="text-xl text-bold">{policy.registrationDate}</h3>
-            <h3 className="text-xl text-bold">{policy.expirationDate}</h3>
-            <h3 className="text-xl text-bold">{policy.claimedStatus}</h3>
-            <h3 className="text-xl text-bold">
-              {microalgosToAlgos(policy.amountClaimed)}
-            </h3>
-          </div>
-        ))}
     </main>
+
+    
   );
 }
