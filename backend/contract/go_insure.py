@@ -89,7 +89,6 @@ def purchase_policy(
 ) -> Expr:
     """
     Buys a new property policy for an account.
-    A new policy id is generated to identify the policy once purchased successfully.
     """
     txn = pay_txn.get()
     return Seq(
