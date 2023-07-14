@@ -71,6 +71,7 @@ def demo() -> None:
     print(f"Deployer global state {app_client.get_global_state()}")
 
     acct1_client = app_client.prepare(signer=acct1.signer)
+    acct2_client = app_client.prepare(signer=acct2.signer)
 
     # Account 1 - This approves
     txn = PaymentTxn(
@@ -95,14 +96,15 @@ def demo() -> None:
     print(result.return_value)
 
 
-    # Account 2 - This rejects
+    # Account 2 - Line 104 fails because of insufficient premium amount
     txn = PaymentTxn(
         sender=acct2.address,
         sp=algod_client.suggested_params(),
         receiver=app_addr,
-        amt=int(consts.algo * .3),
+        # amt=int(consts.algo * .3),
+        amt=int(consts.algo * 1),
     )
-    acct1_client.call(
+    acct2_client.call(
         purchase_policy,
         area="Ruiru",
         state="Kiambu",
@@ -110,12 +112,12 @@ def demo() -> None:
         pay_txn=TransactionWithSigner(txn=txn, signer=acct2.signer),
         boxes=[(app_id, encoding.decode_address(acct2.address))],
     )
-    result = acct1_client.call(
+    result = acct2_client.call(
         get_policy,
         addr=acct2.address,
         boxes=[(app_id, encoding.decode_address(acct2.address))],
     )
-    print(result.return_value)
+    print(result.return_value) 
 
 
 if __name__ == "__main__":

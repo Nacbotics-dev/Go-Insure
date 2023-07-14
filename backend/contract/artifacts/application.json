@@ -124,7 +124,7 @@
         }
     },
     "contract": {
-        "name": "InsurancedApp",
+        "name": "go_insure",
         "methods": [
             {
                 "name": "bootstrap",
