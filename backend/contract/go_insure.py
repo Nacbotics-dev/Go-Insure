@@ -78,6 +78,7 @@ go_insure_app = Application(
 def bootstrap() -> Expr:
     """Set insurer address to the current app address."""
     return Seq(
+        go_insure_app.initialize_global_state(),
         go_insure_app.state.insurer.set(Global.current_application_address()),
     )
 
