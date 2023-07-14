@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useWallet } from "@txnlab/use-wallet";
 import { shortenAddress } from "../helpers/shortenAddress";
 // import app client
-import { InsurancedApp } from "../app_client/insurancedapp_client";
+import { go_insure } from "../app_client/go_insure_client";
 import { makeCall } from "../request";
 
 // If you just need a placeholder signer
@@ -20,8 +20,8 @@ const PlaceHolderSigner: algosdk.TransactionSigner = (
 
 // AnonClient can still allow reads for an app but no transactions
 // can be signed
-const AnonClient = (client: algosdk.Algodv2, appId: number): InsurancedApp => {
-  return new InsurancedApp({
+const AnonClient = (client: algosdk.Algodv2, appId: number): go_insure => {
+  return new go_insure({
     // @ts-ignore
     client: client,
     signer: PlaceHolderSigner,
@@ -31,7 +31,7 @@ const AnonClient = (client: algosdk.Algodv2, appId: number): InsurancedApp => {
 };
 
 export default function Home() {
-  const [appId, setAppId] = useState<number>(256397354);
+  const [appId, setAppId] = useState<number>(0);
   // Setup config for client/network.
   const [apiProvider, setApiProvider] = useState(clients.APIProvider.AlgoNode);
   const [network, setNetwork] = useState(clients.Network.TestNet);
@@ -40,7 +40,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   // Init our app client
-  const [appClient, setAppClient] = useState<InsurancedApp>(
+  const [appClient, setAppClient] = useState<go_insure>(
     AnonClient(algodClient, appId)
   );
 
@@ -60,16 +60,16 @@ export default function Home() {
       setAppClient(AnonClient(algodClient /*, appId*/));
     } else if (activeAccount && activeAccount.address != appClient.sender) {
       setAppClient(
-        new InsurancedApp({
+        new go_insure({
           client: algodClient,
           signer: signer,
           sender: activeAccount.address,
           appId: appId,
         })
       );
+      console.log('hello');
+      
     }
-
-    
 
     _getMyPolicy();
   }, [activeAccount]);
@@ -104,7 +104,6 @@ export default function Home() {
     setLoading(true);
     console.log(appClient);
     const { appId, appAddress, txId } = await appClient.create();
-    await appClient.bootstrap();
 
     console.log(appId);
     console.log(appAddress);
@@ -236,9 +235,9 @@ export default function Home() {
 
   return (
     <main className="">
-      {/* <button className="m-10" onClick={() => createApp()}>
+      <button className="m-10" onClick={() => createApp()}>
         createApp
-      </button> */}
+      </button>
       {/* NAVBAR */}
       <header className="w-full px-32 py-8 font-medium flex justify-between items-center">
         <h2 className="font-bold text-2xl">GO-INSURE</h2>

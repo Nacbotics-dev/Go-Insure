@@ -80,7 +80,6 @@ def bootstrap() -> Expr:
         go_insure_app.state.insurer.set(Global.current_application_address()),
     )
 
-
 @go_insure_app.external
 def purchase_policy(
     pay_txn: abi.PaymentTransaction,
