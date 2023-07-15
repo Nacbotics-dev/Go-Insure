@@ -51,6 +51,7 @@ A decentralized insurance solution offers several benefits:
 
 2. Access the application in your web browser at `http://localhost:3000`.
 
+
 ## Dependencies
 
 - python: version 3.11.3
@@ -60,3 +61,9 @@ A decentralized insurance solution offers several benefits:
 - algosdk: version 2.1.0
 - next-js: version 13.4.9
 - txnlab/use-wallet: version 2.0.0-alpha.5
+
+
+## License
+
+This project is licensed under the MIT License.
+
